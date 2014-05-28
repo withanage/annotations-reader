@@ -6,7 +6,7 @@
  */
 
 function Reader($scope, $http) {
-    $http.get('../fedora/rest/test/fcr:transform/default').
+    $http.get('../../fedora/rest/test/fcr:transform/default').
         success(function(data) {
             $scope.annotation = data;
         });
