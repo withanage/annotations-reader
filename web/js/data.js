@@ -6,10 +6,12 @@
  */
 
 function Reader($scope, $http) {
-    $http.get('../../fedora/rest/test/fcr:transform/default').
-        success(function(data) {
-            $scope.annotation = data;
-        });
+    var folder = '../../';
+    var uuid = 'fedora/rest/test/97/9c/9f/bc/979c9fbc-94f7-4bcb-aae4-2b4737024113/';
+    $http.get(folder + uuid+ 'fcr:transform/default').
+            success(function(data) {
+                $scope.annotation = data;
+            });
 }
 
 
