@@ -5,10 +5,10 @@
  * 
  */
 
-function Hello($scope, $http) {
+function Reader($scope, $http) {
     $http.get('http://serv21.ub.uni-heidelberg.de:8080/annotations/rest/test/fcr:transform/default').
         success(function(data) {
-            $scope.greeting = data;
+            $scope.annotation = data;
         });
 }
 
