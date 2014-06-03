@@ -66,10 +66,9 @@
                 document.getElementById("eror").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
-            
-            if (checkUrl(url)==False){
-                
-                   document.getElementById("eror").innerHTML = 'collection do not exist';
+            //check if the collection exists
+            if (checkUrl(url)==true){
+                document.getElementById("eror").innerHTML = 'collection do not exist';
             }
             else {
 
