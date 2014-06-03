@@ -33,14 +33,18 @@
                 }
                 return HTTP_GET_VARS[v];
             }
-            function checkUrl(url) {
+
+            function request_rewrite() {
                 var request = false;
                 if (window.XMLHttpRequest) {
                     request = new XMLHttpRequest;
                 } else if (window.ActiveXObject) {
                     request = new ActiveXObject("Microsoft.XMLHttp");
                 }
-
+                return request;
+            }
+            function checkUrl(url) {
+                request = request_rewrite();
                 if (request) {
                     request.open("GET", url);
                     if (request.status == 200) {
@@ -48,16 +52,6 @@
                     }
                 }
                 return false;
-            }
-
-
-            if (window.XMLHttpRequest)
-            {// code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp = new XMLHttpRequest();
-            }
-            else
-            {// code for IE6, IE5
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
             var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
@@ -70,11 +64,11 @@
             }
             //check if the collection exists
             if (checkUrl(full_url) == false) {
-                document.getElementById("error").innerHTML = full_url+' collection do not exist';
+                document.getElementById("error").innerHTML = full_url + ' collection do not exist';
             }
             else {
 
-
+                xmlhttp = request_rewrite();
                 xmlhttp.open("GET", full_url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
