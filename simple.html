@@ -60,20 +60,21 @@
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
-
+            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
             var url = GET('collection');
+            
             if (url == '') {
                 document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
             //check if the collection exists
-            if (checkUrl(url) == false) {
+            if (checkUrl(repo_url+url) == false) {
                 document.getElementById("error").innerHTML = 'collection do not exist';
             }
             else {
 
 
-                xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/" + url + "/fcr:export", false);
+                xmlhttp.open("GET", repo_url + url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
                 xmlDoc = xmlhttp.responseXML;
