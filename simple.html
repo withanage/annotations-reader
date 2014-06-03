@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Test</h1>
+        <div>
+            <b>To:</b> <span id="to"></span><br>
+
+        </div>
+
+        <script>
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1/fcr:export", false);
+            //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
+            xmlhttp.send();
+            xmlDoc = xmlhttp.responseXML;
+
+
+            //var response = transport.responseXML.getElementsByTagName("value");
+            var ns = "http://www.jcp.org/jcr/sv/1.0";
+            var collection = xmlDoc.getElementsByTagNameNS(ns, "node");
+
+
+            var getElementsByTagNameNS = function(node, ns, tagName) {
+                if (node.getElementsByTagNameNS) {
+                    return node.getElementsByTagNameNS(ns, tagName);
+                }
+
+                return node.getElementsByTagName(ns + ':' + tagName);
+            };
+            
+	 var prop='';
+	   for(var i=0; i<collection.length; i++){
+		anno= collection[i].children;
+		prop += '<h1>'+i+'</h1>';
+		for  (j =0 ; j < anno.length; j++){
+			prop += anno[j].attributes[0].nodeValue;
+			prop += '<br>'+anno[j]. innerHTML+'</br>';
+		
+		}
+		
+			
+
+	}
+            document.getElementById("to").innerHTML = prop;
+
+            /**
+             
+             document.getElementById("from").innerHTML =
+             xmlDoc.getElementsByTagName("from")[0].childNodes[0].nodeValue;
+             document.getElementById("message").innerHTML =
+             xmlDoc.getElementsByTagName("body")[0].childNodes[0].nodeValue;
+             */
+        </script>
+
+    </body>
+</html>

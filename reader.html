@@ -1,0 +1,2053 @@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</title>
+        <meta charset="UTF-8">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript">
+
+            function addChild()
+            {
+                var id = $("#new_id").val().trim();
+
+                var mixin = $("#new_mixin").val();
+
+                var newURI = $('#main').attr('resource') + "/" + id;
+
+                if (mixin != '') {
+                    var postURI = newURI + "?mixin=" + mixin;
+                } else {
+                    var postURI = newURI;
+                }
+
+                if (mixin == "fedora:datastream") {
+                    var update_file = document.getElementById("datastream_payload").files[0];
+                    var reader = new FileReader();
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 201) {
+                                var loc = xhr.getResponseHeader('Location').replace("/fcr:content", "");
+
+                                if (loc != null) {
+                                    window.location = loc;
+                                } else {
+                                    window.location.reload();
+                                }
+                            } else {
+                                ajaxErrorHandler(xhr, "", "Error creating datastream");
+                            }
+                        }
+                    }
+
+                    if (id == "") {
+                        xhr.open("POST", newURI + "/fcr:content");
+                    } else {
+                        xhr.open("PUT", newURI + "/fcr:content");
+                    }
+
+                    xhr.setRequestHeader("Content-type", update_file.type || "application/octet-stream");
+                    reader.onload = function(e) {
+                        var result = e.target.result;
+                        var data = new Uint8Array(result.length);
+                        for (var i = 0; i < result.length; i++) {
+                            data[i] = (result.charCodeAt(i) & 0xff);
+                        }
+                        xhr.send(data.buffer);
+                    };
+                    reader.readAsBinaryString(update_file);
+                } else {
+                    $.post(postURI, function(data, textStatus, request) {
+                        window.location = request.getResponseHeader('Location');
+                    }).fail(ajaxErrorHandler);
+                }
+
+                return false;
+            }
+
+            function sendImport() {
+                var mixin = $("#import_format").val();
+                var postURI = $('#main').attr('resource') + "/fcr:import?format=" + mixin;
+
+                var update_file = document.getElementById("import_file").files[0];
+                var reader = new FileReader();
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status == 201) {
+                            window.location.reload();
+                        } else {
+                            ajaxErrorHandler(xhr, "", "Error importing content");
+                        }
+                    }
+                }
+
+                xhr.open("POST", postURI);
+
+                xhr.setRequestHeader("Content-type", update_file.type || "application/octet-stream");
+                reader.onload = function(e) {
+                    var result = e.target.result;
+                    var data = new Uint8Array(result.length);
+                    for (var i = 0; i < result.length; i++) {
+                        data[i] = (result.charCodeAt(i) & 0xff);
+                    }
+                    xhr.send(data.buffer);
+                };
+                reader.readAsBinaryString(update_file);
+
+                return false;
+
+            }
+
+            $(function() {
+                $('#new_mixin').change(function() {
+                    if ($('#new_mixin').val() == "fedora:datastream") {
+                        $('#datastream_payload_container').show();
+                    } else {
+                        $('#datastream_payload_container').hide();
+                    }
+                });
+
+                $('#action_create').submit(addChild);
+                $('#action_sparql_update').submit(sendSparqlUpdate);
+                $('#action_register_namespace').submit(registerNamespace);
+                $('#action_delete').submit(deleteItem);
+                $('#action_create_transaction').submit(submitAndFollowLocation);
+                $('#action_rollback_transaction').submit(submitAndRedirectToBase);
+                $('#action_commit_transaction').submit(submitAndRedirectToBase);
+                $('#action_import').submit(sendImport);
+                $('#action_cnd_update').submit(sendCndUpdate);
+                $('#action_sparql_select').submit(sendSparqlQuery);
+                $('#action_revert').submit(patchAndReload);
+                $('#action_remove_version').submit(removeVersion);
+
+            });
+
+            function submitAndFollowLocation() {
+                var $form = $(this);
+
+                var postURI = $form.attr('action');
+
+                $.post(postURI, "some-data-to-make-chrome-happy", function(data, textStatus, request) {
+                    window.location = request.getResponseHeader('Location');
+                }).fail(ajaxErrorHandler);
+
+                return false;
+            }
+
+            function removeVersion() {
+                var $form = $(this);
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 204) {
+                            window.location = $form.attr('data-redirect-after-submit');
+                        } else {
+                            ajaxErrorHandler(xhr, "", "Error removing version");
+                        }
+                    }
+                }
+                xhr.open("DELETE", $form.attr('action'));
+                xhr.send(null);
+
+                return false;
+            }
+            function patchAndReload() {
+                var $form = $(this);
+                var patchURI = $form.attr('action');
+
+                $.ajax({url: patchURI, type: "PATCH", data: "", success: function(data, textStatus, request) {
+                        window.location = $form.attr('data-redirect-after-submit');
+                    }, error: ajaxErrorHandler});
+
+                return false;
+            }
+
+            function submitAndRedirectToBase() {
+                var $form = $(this);
+
+
+                var postURI = $form.attr('action');
+
+                $.post(postURI, "some-data-to-make-chrome-happy", function(data, textStatus, request) {
+                    window.location = $form.attr('data-redirect-after-submit');
+                }).fail(ajaxErrorHandler);
+
+                return false;
+            }
+
+
+            function registerNamespace() {
+                var postURI = $('#main').attr('resource');
+
+
+                var query = "INSERT { <" + $('#namespace_uri').val() + "> <http://purl.org/vocab/vann/preferredNamespacePrefix> \"" + $('#namespace_prefix').val() + "\"} WHERE {}";
+
+
+                $.ajax({url: postURI, type: "POST", contentType: "application/sparql-update", data: query, success: function(data, textStatus, request) {
+                        window.location.reload(true);
+                    }}).fail(ajaxErrorHandler);
+
+                return false;
+            }
+
+
+            function sendSparqlQuery() {
+                var $form = $(this);
+                var postURI = $form.attr('action');
+
+                $.ajax({url: postURI, type: "POST", contentType: "application/sparql-query", data: $("#sparql_select_query").val(), success: function(data, textStatus, request) {
+
+                        $('#errorLabel').text("RESULT");
+                        $('#errorText').html("<pre></pre>");
+                        $('#errorText pre').text(request.responseText);
+                        $('#errorModal').modal('show');
+                    }, error: ajaxErrorHandler});
+
+                return false;
+            }
+
+            function sendSparqlUpdate() {
+                var postURI = $('#main').attr('resource');
+
+
+                $.ajax({url: postURI, type: "PATCH", contentType: "application/sparql-update", data: $("#sparql_update_query").val(), success: function(data, textStatus, request) {
+                        window.location.reload(true);
+                    }, error: ajaxErrorHandler});
+
+                return false;
+            }
+
+            function sendCndUpdate() {
+                var postURI = $('#main').attr('resource');
+
+
+                $.ajax({url: postURI, type: "POST", contentType: "text/cnd", data: $("#cnd_update_query").val(), success: function(data, textStatus, request) {
+                        window.location.reload(true);
+                    }, error: ajaxErrorHandler});
+
+                return false;
+            }
+
+            function deleteItem()
+            {
+                var uri = $('#main').attr('resource');
+                var arr = uri.toString().split("/");
+                arr.pop();
+                var newURI = arr.join("/");
+
+                $.ajax({url: uri, type: "DELETE", success: function() {
+                        window.location = newURI;
+                    }}).fail(ajaxErrorHandler);
+                return false;
+            }
+
+            function updateFile()
+            {
+                var update_file = document.getElementById("update_file").files[0];
+                var url = window.location + "/fcr:content";
+                var reader = new FileReader();
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status == 204 || xhr.status == 201) {
+                            window.location.reload(true);
+                        } else {
+                            ajaxErrorHandler(xhr, "", "Error creating datastream");
+                        }
+                    }
+                }
+                xhr.open("PUT", url);
+                xhr.setRequestHeader("Content-type", update_file.type);
+                reader.onload = function(e) {
+                    var result = e.target.result;
+                    var data = new Uint8Array(result.length);
+                    for (var i = 0; i < result.length; i++) {
+                        data[i] = (result.charCodeAt(i) & 0xff);
+                    }
+                    xhr.send(data.buffer);
+                };
+                reader.readAsBinaryString(update_file);
+            }
+
+            function updateAccessRoles()
+            {
+                var update_json = document.getElementById("rbacl_json").value;
+                var url = window.location + "/fcr:accessroles";
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 204 || xhr.status == 201) {
+                            window.location.reload(true);
+                        } else {
+                            ajaxErrorHandler(xhr, "", "Error creating datastream");
+                        }
+                    }
+                }
+                xhr.open("POST", url);
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(update_json);
+            }
+
+            function ajaxErrorHandler(xhr, textStatus, errorThrown) {
+                $('#errorLabel').text(errorThrown);
+                $('#errorText').text(xhr.responseText);
+                $('#errorModal').modal('show');
+
+            }
+        </script>
+        <style type="text/css">
+            .mode_root #action_delete {
+                display: none;
+            }
+
+            body {
+                padding-bottom: 40px;
+            }
+
+            .nt_file #action_create, .nt_resource #action_create {
+                display: none;
+            }
+
+            .nt_file #action_import, .nt_resource #action_import {
+                display: none;
+            }
+
+            dl {
+                padding-left: 19px;
+            }
+
+            dd {
+                padding-left: 38px;
+            }
+
+            .well dl {
+                padding-left: 0;
+            }
+
+            .well {
+                text-indent: -35px;
+                padding-left: 54px;
+            }
+
+            #metadata .panel-body {
+                word-wrap: break-word;
+                text-indent: -35px;
+                padding-left: 35px;
+            }
+
+            #datastream_payload_container {
+                display: none;
+            }
+
+            #actions.visible-lg.in, #actions.visible-lg.collapsing, #actions.visible-md.in, #actions.visible-md.collapsing  {
+                display: block !important;
+            }
+
+            #toggle-actions {
+                float:right;
+                margin-bottom: 1em;
+            }
+
+            #actions {
+                margin-bottom: 3em;
+            }
+
+            .namespace {
+                font-size: .8em;
+            }</style></head>
+
+
+    <body  class="nt_folder">
+        <div  id="main" class="container" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001">
+
+
+
+            <div class="row">
+
+                
+
+                <div id="metadata" class="col-md-9 col-md-pull-3">
+
+        
+
+                    <h2>Inlined Resources</h2>
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/5">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_5_triples" >
+                                <h3><a href="#">Annotation Titelss</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_5_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:38.903Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:38.947Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">cfb2b48d-afdd-4785-bc39-6aa61b4955fb</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/4">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_4_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/4">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_4_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:38.824Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:38.867Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">66649a3f-8a43-4b77-bf3f-c892a2dd215c</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/8">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_8_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/8">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_8_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:39.251Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:39.304Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">866654cf-dddd-4ff0-b05a-0caaa6a9c9f4</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/10">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_10_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/10">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_10_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:39.439Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:39.496Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">40a090d2-1d4a-4a31-b66b-c28f7b9f858b</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_6_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_6_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:39.003Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:39.111Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">73465b9f-7c13-464c-9982-744b26c61745</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/7">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_7_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/7">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_7_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:39.163Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:39.212Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">70af1f3d-f6e5-4034-bf89-8bf3cd9af3b9</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/9">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_9_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/9">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_9_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:39.344Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:39.399Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">842b91e9-7ad6-4997-a1d9-bee9c32ce545</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/2">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_2_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/2">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_2_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:38.664Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:38.71Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">5604a854-b452-4b59-b2e5-173716f7c6bd</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_1_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_1_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:24.048Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:38.628Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">c1172d82-f642-4a7f-8c9b-bbd382cd3589</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" resource="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/3">
+                            <div class="panel-heading" data-toggle="collapse" data-target="#http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_3_triples" >
+                                <h3><a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/3">Annotation Titel</a></h3>
+                            </div>
+                            <div class="panel-collapse collapse"  id="http_serv21_ub_uni-heidelberg_de_8080_fedora_rest_de_uni-heidelberg_ub_digi_diglit_lehmann1756_0001_3_triples">
+                                <div class="panel-body">
+                                    <dl>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">description</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/description"> Annotation Text :  Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text Annotation Text</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://purl.org/dc/elements/1.1/">dc:</span>
+                                        <span class="localName">title</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://purl.org/dc/elements/1.1/title">Annotation Titel</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">created</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#created">2014-06-02T10:10:38.744Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">createdBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#createdBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">hasParent</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"  property="http://fedora.info/definitions/v4/repository#hasParent">http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001</a>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModified</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModified">2014-06-02T10:10:38.788Z</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">lastModifiedBy</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#lastModifiedBy">bypassAdmin</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">mixinTypes</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:object</span>
+                                        </dd>
+
+
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#mixinTypes">fedora:resource</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">primaryType</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#primaryType">nt:folder</span>
+                                        </dd>
+
+
+                                        <dt class="text-info" title="managed predicate">
+                                        <span class="namespace text-muted" title="http://fedora.info/definitions/v4/repository#">fcrepo:</span>
+                                        <span class="localName">uuid</span>
+                                        </dt>
+                                        <dd>
+                                            <span property="http://fedora.info/definitions/v4/repository#uuid">fe14d28b-d453-4062-9209-7f75e77d773f</span>
+                                        </dd>
+
+
+                                        <dt>
+                                        <span class="namespace text-muted" title="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf:</span>
+                                        <span class="localName">type</span>
+                                        </dt>
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#object"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#object</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#relations"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#relations</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://fedora.info/definitions/v4/rest-api#resource"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://fedora.info/definitions/v4/rest-api#resource</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://purl.org/dc/elements/1.1/describable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://purl.org/dc/elements/1.1/describable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0created"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0created</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lastModified"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lastModified</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0lockable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0lockable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/mix/1.0referenceable"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/mix/1.0referenceable</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0base"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0base</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0folder"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0folder</a>
+                                        </dd>
+
+
+                                        <dd>
+                                            <a href="http://www.jcp.org/jcr/nt/1.0hierarchyNode"  property="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.jcp.org/jcr/nt/1.0hierarchyNode</a>
+                                        </dd>
+
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </body>
+</html>

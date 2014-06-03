@@ -7,8 +7,8 @@
 
 function Reader($scope, $http) {
     var folder = '../../';
-    var uuid = 'fedora/rest/test/97/9c/9f/bc/979c9fbc-94f7-4bcb-aae4-2b4737024113/';
-    var template ='default1';
+    var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
+    var template ='default3';
     $http.get(folder + uuid+ 'fcr:transform/'+template).
             success(function(data) {
                 $scope.annotation = data;
