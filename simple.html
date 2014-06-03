@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <div id=error"></div>
+        <div id="error"></div>
         <div>
             <span id="to"></span>
 
@@ -25,12 +25,29 @@
                 }
             }
 
+
             function GET(v)
             {
                 if (!HTTP_GET_VARS[v]) {
                     return 'undefined';
                 }
                 return HTTP_GET_VARS[v];
+            }
+            function checkUrl(url) {
+                var request = false;
+                if (window.XMLHttpRequest) {
+                    request = new XMLHttpRequest;
+                } else if (window.ActiveXObject) {
+                    request = new ActiveXObject("Microsoft.XMLHttp");
+                }
+
+                if (request) {
+                    request.open("GET", url);
+                    if (request.status == 200) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
 
@@ -49,7 +66,13 @@
                 document.getElementById("eror").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
+            
+            if (checkUrl(url)==False){
+                
+                   document.getElementById("eror").innerHTML = 'collection do not exist';
+            }
             else {
+
 
                 xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/" + url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
