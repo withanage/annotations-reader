@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <h1>Test</h1>
+        <div id=error"></div>
         <div>
-            <b>To:</b> <span id="to"></span><br>
+            <span id="to"></span>
 
         </div>
 
         <script>
+
+            HTTP_GET_VARS = new Array();
+            strGET = document.location.search.substr(1, document.location.search.length);
+            if (strGET != '')
+            {
+                gArr = strGET.split('&');
+                for (i = 0; i < gArr.length; ++i)
+                {
+                    v = '';
+                    vArr = gArr[i].split('=');
+                    if (vArr.length > 1) {
+                        v = vArr[1];
+                    }
+                    HTTP_GET_VARS[unescape(vArr[0])] = unescape(v);
+                }
+            }
+
+            function GET(v)
+            {
+                if (!HTTP_GET_VARS[v]) {
+                    return 'undefined';
+                }
+                return HTTP_GET_VARS[v];
+            }
+
+
             if (window.XMLHttpRequest)
             {// code for IE7+, Firefox, Chrome, Opera, Safari
                 xmlhttp = new XMLHttpRequest();
@@ -16,72 +42,49 @@
             {// code for IE6, IE5
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
-            xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1/fcr:export", false);
-            //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
-            xmlhttp.send();
-            xmlDoc = xmlhttp.responseXML;
 
 
-            //var response = transport.responseXML.getElementsByTagName("value");
-            var ns = "http://www.jcp.org/jcr/sv/1.0";
-            var collection = xmlDoc.getElementsByTagNameNS(ns, "node");
+            var url = GET('collection');
+            if (url == '') {
+                document.getElementById("eror").innerHTML = 'collection undefined: e.f. collection=mycollection';
+
+            }
+            else {
+
+                xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/" + url + "/fcr:export", false);
+                //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
+                xmlhttp.send();
+                xmlDoc = xmlhttp.responseXML;
 
 
-            var getElementsByTagNameNS = function(node, ns, tagName) {
-                if (node.getElementsByTagNameNS) {
-                    return node.getElementsByTagNameNS(ns, tagName);
+                //var response = transport.responseXML.getElementsByTagName("value");
+                var ns = "http://www.jcp.org/jcr/sv/1.0";
+                var collection = xmlDoc.getElementsByTagNameNS(ns, "node");
+
+
+                var getElementsByTagNameNS = function(node, ns, tagName) {
+                    if (node.getElementsByTagNameNS) {
+                        return node.getElementsByTagNameNS(ns, tagName);
+                    }
+
+                    return node.getElementsByTagName(ns + ':' + tagName);
+                };
+
+                var prop = '';
+                for (var i = 0; i < collection.length; i++) {
+                    anno = collection[i].children;
+                    prop += '<h1>' + i + '</h1>';
+                    for (j = 0; j < anno.length; j++) {
+                        prop += anno[j].attributes[0].nodeValue;
+                        prop += '<br>' + anno[j].innerHTML + '</br>';
+
+                    }
+
+
+
                 }
-
-                return node.getElementsByTagName(ns + ':' + tagName);
-            };
-            
-	 var prop='';
-	   for(var i=0; i<collection.length; i++){
-		anno= collection[i].children;
-		prop += '<h1>'+i+'</h1>';
-		for  (j =0 ; j < anno.length; j++){
-			prop += anno[j].attributes[0].nodeValue;
-			prop += '<br>'+anno[j]. innerHTML+'</br>';
-		
-		}
-		
-			
-
-	}
-            document.getElementById("to").innerHTML = prop;
-
-            /**
-             
-             document.getElementById("from").innerHTML =
-             xmlDoc.getElementsByTagName("from")[0].childNodes[0].nodeValue;
-             document.getElementById("message").innerHTML =
-             xmlDoc.getElementsByTagName("body")[0].childNodes[0].nodeValue;
-             */
- 
-
-HTTP_GET_VARS=new Array();
-strGET=document.location.search.substr(1,document.location.search.length);
-if(strGET!='')
-    {
-    gArr=strGET.split('&');
-    for(i=0;i<gArr.length;++i)
-        {
-        v='';vArr=gArr[i].split('=');
-        if(vArr.length>1){v=vArr[1];}
-        HTTP_GET_VARS[unescape(vArr[0])]=unescape(v);
-        }
-    }
- 
-function GET(v)
-{
-if(!HTTP_GET_VARS[v]){return 'undefined';}
-return HTTP_GET_VARS[v];
-}
- 
-document.writeln ('Erste Var:' + GET('text') + ' du');
-document.writeln ('Zweite Var:' + GET('text2') + ' da draussen');
-
- 
+                document.getElementById("to").innerHTML = prop;
+            }
 
         </script>
 
