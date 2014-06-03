@@ -62,19 +62,20 @@
 
             var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
             var url = GET('collection');
-            
+            var full_url = repo_url + url;
+
             if (url == '') {
                 document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
             //check if the collection exists
-            if (checkUrl(repo_url+url) == false) {
+            if (checkUrl(full_url) == false) {
                 document.getElementById("error").innerHTML = 'collection do not exist';
             }
             else {
 
 
-                xmlhttp.open("GET", repo_url + url + "/fcr:export", false);
+                xmlhttp.open("GET", full_url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
                 xmlDoc = xmlhttp.responseXML;
