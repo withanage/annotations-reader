@@ -63,12 +63,12 @@
 
             var url = GET('collection');
             if (url == '') {
-                document.getElementById("eror").innerHTML = 'collection undefined: e.f. collection=mycollection';
+                document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
             //check if the collection exists
             if (checkUrl(url) == false) {
-                document.getElementById("eror").innerHTML = 'collection do not exist';
+                document.getElementById("error").innerHTML = 'collection do not exist';
             }
             else {
 
