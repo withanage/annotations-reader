@@ -33,11 +33,14 @@
                 }
                 return HTTP_GET_VARS[v];
             }
-
-            
             function checkUrl(url) {
-                request = request_rewrite();
-                var request = (window.XMLHttpRequest == true ? request = new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHttp"));
+                var request = false;
+                if (window.XMLHttpRequest) {
+                    request = new XMLHttpRequest;
+                } else if (window.ActiveXObject) {
+                    request = new ActiveXObject("Microsoft.XMLHttp");
+                }
+
                 if (request) {
                     request.open("GET", url);
                     if (request.status == 200) {
@@ -47,27 +50,35 @@
                 return false;
             }
 
-            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
-            var resource = GET('resource');
-            export_format = "/fcr:export";
-            var full_url = repo_url + resource;
 
-            if (resource == '') {
+
+
+            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
+            var url = GET('collection');
+            var full_url = repo_url + url;
+
+            if (url == '') {
                 document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
             //check if the collection exists
             if (checkUrl(full_url) == false) {
-                //document.getElementById("error").innerHTML = full_url + ' collection do not exist';
+                document.getElementById("error").innerHTML = full_url + 'collection do not exist';
             }
             else {
+                if (window.XMLHttpRequest)
+                {
+                    xmlhttp = new XMLHttpRequest();
+                }
+                else
+                {
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
 
-                var xmlhttp = (window.XMLHttpRequest == true ? request = new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHttp"));
-                xmlhttp.open("GET", full_url + export_format, false);
+                xmlhttp.open("GET", full_url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
                 xmlDoc = xmlhttp.responseXML;
-
 
                 //var response = transport.responseXML.getElementsByTagName("value");
                 var ns = "http://www.jcp.org/jcr/sv/1.0";
