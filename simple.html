@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <div id="error"></div>
+        <div><span id="error"></span></div>
         <div>
             <span id="to"></span>
 
@@ -67,7 +67,7 @@
 
             }
             //check if the collection exists
-            if (checkUrl(url)==true){
+            if (checkUrl(url) == false) {
                 document.getElementById("eror").innerHTML = 'collection do not exist';
             }
             else {
