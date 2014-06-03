@@ -75,6 +75,7 @@
                     anno = collection[i].children;
                     prop += '<h1>' + i + '</h1>';
                     for (j = 0; j < anno.length; j++) {
+                        prop += '<h2>' + j + '</h2>';
                         prop += anno[j].attributes[0].nodeValue;
                         prop += '<br>' + anno[j].innerHTML + '</br>';
 
