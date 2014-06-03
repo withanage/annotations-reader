@@ -56,11 +56,11 @@
             }
 
             var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
-            var url = GET('collection');
+            var resource = GET('resource');
             export_format = "/fcr:export";
-            var full_url = repo_url + url;
+            var full_url = repo_url + resource;
 
-            if (url == '') {
+            if (resource == '') {
                 document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
