@@ -8,24 +8,45 @@
         </div>
 
         <script>
+            /**
+             * Global varaibles
+             * @returns {Array|HTTP_GET_VARS}
+             */
 
-            HTTP_GET_VARS = new Array();
-            strGET = document.location.search.substr(1, document.location.search.length);
-            if (strGET != '')
-            {
-                gArr = strGET.split('&');
-                for (i = 0; i < gArr.length; ++i)
+            HTTP_GET_VARS = get_params();
+            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
+            var resource = GET('resource');
+            var full_url = repo_url + resource;
+            var ns = "http://www.jcp.org/jcr/sv/1.0";
+
+            /**
+             * returns the  parameter values
+             * @param {type} v
+             * @returns {HTTP_GET_VARS|String}
+             */
+            function get_params() {
+                HTTP_GET_VARS = new Array();
+                strGET = document.location.search.substr(1, document.location.search.length);
+                if (strGET != '')
                 {
-                    v = '';
-                    vArr = gArr[i].split('=');
-                    if (vArr.length > 1) {
-                        v = vArr[1];
+                    gArr = strGET.split('&');
+                    for (i = 0; i < gArr.length; ++i)
+                    {
+                        v = '';
+                        vArr = gArr[i].split('=');
+                        if (vArr.length > 1) {
+                            v = vArr[1];
+                        }
+                        HTTP_GET_VARS[unescape(vArr[0])] = unescape(v);
                     }
-                    HTTP_GET_VARS[unescape(vArr[0])] = unescape(v);
                 }
+                return HTTP_GET_VARS;
             }
 
-
+            /**
+             * check if a parameter exists and return its value
+             * @type Arguments
+             */
             function GET(v)
             {
                 if (!HTTP_GET_VARS[v]) {
@@ -33,6 +54,14 @@
                 }
                 return HTTP_GET_VARS[v];
             }
+
+            /**
+             * check if url exists
+             * @param {type} node
+             * @param {type} ns
+             * @param {type} tagName
+             * @returns {unresolved}
+             */
             function checkUrl(url) {
                 var request = false;
                 if (window.XMLHttpRequest) {
@@ -50,24 +79,25 @@
                 return false;
             }
 
-
-
-
-            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
-            var resource = GET('resource');
-            var full_url = repo_url + resource;
-
-            if (resource == '') {
-                document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
-
-            }
-            //check if the collection exists
             /**
-            if (checkUrl(full_url) == false) {
-                document.getElementById("error").innerHTML = full_url + 'collection do not exist';
+             *  get Elements by tag
+             * @param {type} node
+             * @param {type} ns
+             * @param {type} tagName
+             * @returns {unresolved}
+             */
+            var getElementsByTagNameNS = function(node, ns, tagName) {
+                if (node.getElementsByTagNameNS) {
+                    return node.getElementsByTagNameNS(ns, tagName);
+                }
+                return node.getElementsByTagName(ns + ':' + tagName);
             }
-            */
-            else {
+            
+            /**
+             * get server result
+             * @returns {Node|Document}
+             */
+            function    get_results() {
                 if (window.XMLHttpRequest)
                 {
                     xmlhttp = new XMLHttpRequest();
@@ -80,36 +110,25 @@
                 xmlhttp.open("GET", full_url + "/fcr:export", false);
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
-                xmlDoc = xmlhttp.responseXML;
-
-                var ns = "http://www.jcp.org/jcr/sv/1.0";
-                var collection = xmlDoc.getElementsByTagNameNS(ns, "node");
+                return  xmlhttp.responseXML();
+            }
 
 
-                var getElementsByTagNameNS = function(node, ns, tagName) {
-                    if (node.getElementsByTagNameNS) {
-                        return node.getElementsByTagNameNS(ns, tagName);
-                    }
+            var prop = '';
+            var collection = get_results().getElementsByTagNameNS(ns, "node");
 
-                    return node.getElementsByTagName(ns + ':' + tagName);
-                };
-
-                var prop = '';
-                for (var i = 0; i < collection.length; i++) {
-                    anno = collection[i].children;
-                    prop += '<h1>' + i + '</h1>';
-                    for (j = 0; j < anno.length; j++) {
-                        prop += '<h2>' + j + '</h2>';
-                        prop += anno[j].attributes[0].nodeValue;
-                        prop += '<br>' + anno[j].innerHTML + '</br>';
-
-                    }
-
-
+            for (var i = 0; i < collection.length; i++) {
+                anno = collection[i].children;
+                prop += '<h1>' + i + '</h1>';
+                for (j = 0; j < anno.length; j++) {
+                    prop += '<h2>' + j + '</h2>';
+                    prop += anno[j].attributes[0].nodeValue;
+                    prop += '<br>' + anno[j].innerHTML + '</br>';
 
                 }
-                document.getElementById("to").innerHTML = prop;
             }
+            document.getElementById("to").innerHTML = prop;
+
 
         </script>
 
