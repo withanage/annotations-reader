@@ -55,16 +55,18 @@
 
             var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
             var url = GET('resource');
-            var full_url = repo_url + url;
+            var full_url = repo_url + resource;
 
-            if (url == '') {
+            if (resource == '') {
                 document.getElementById("error").innerHTML = 'collection undefined: e.f. collection=mycollection';
 
             }
             //check if the collection exists
+            /**
             if (checkUrl(full_url) == false) {
                 document.getElementById("error").innerHTML = full_url + 'collection do not exist';
             }
+            */
             else {
                 if (window.XMLHttpRequest)
                 {
@@ -80,7 +82,6 @@
                 xmlhttp.send();
                 xmlDoc = xmlhttp.responseXML;
 
-                //var response = transport.responseXML.getElementsByTagName("value");
                 var ns = "http://www.jcp.org/jcr/sv/1.0";
                 var collection = xmlDoc.getElementsByTagNameNS(ns, "node");
 
