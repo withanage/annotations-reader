@@ -125,13 +125,17 @@
                     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
                 }
 
-                xmlhttp.open("GET", full_url + "/fcr:export", false);
-                //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
+                //xmlhttp.open("GET", full_url + "/fcr:export", false);
+                xmlhttp.open("GET", full_url + "/fcr:transform/default3", false);
                 xmlhttp.send();
                 return  xmlhttp.responseXML;
-                parseXML();
             }
             
+            function read_json(){
+               document.getElementById("to").innerHTML(get_results) 
+            }
+            
+
 
 
 
