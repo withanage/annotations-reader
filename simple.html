@@ -15,6 +15,7 @@
 
             HTTP_GET_VARS = get_params();
             var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
+            //var repo_url = "http:///pers31.ub.uni-heidelberg.de:8080/rest/";
             var resource = GET('resource');
             var full_url = repo_url + resource;
             var ns = "http://www.jcp.org/jcr/sv/1.0";
@@ -92,7 +93,24 @@
                 }
                 return node.getElementsByTagName(ns + ':' + tagName);
             }
-            
+
+            function parseXML() {
+                var prop = '';
+                var collection = get_results().getElementsByTagNameNS(ns, "node");
+
+                for (var i = 0; i < collection.length; i++) {
+                    anno = collection[i].children;
+                    prop += '<h1>' + i + '</h1>';
+                    for (j = 0; j < anno.length; j++) {
+                        prop += '<h2>' + j + '</h2>';
+                        prop += anno[j].attributes[0].nodeValue;
+                        prop += '<br>' + anno[j].innerHTML + '</br>';
+
+                    }
+                }
+                document.getElementById("to").innerHTML = prop;
+            }
+
             /**
              * get server result
              * @returns {Node|Document}
@@ -111,23 +129,10 @@
                 //xmlhttp.open("GET", "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export", false);
                 xmlhttp.send();
                 return  xmlhttp.responseXML;
+                parseXML();
             }
+            
 
-
-            var prop = '';
-            var collection = get_results().getElementsByTagNameNS(ns, "node");
-
-            for (var i = 0; i < collection.length; i++) {
-                anno = collection[i].children;
-                prop += '<h1>' + i + '</h1>';
-                for (j = 0; j < anno.length; j++) {
-                    prop += '<h2>' + j + '</h2>';
-                    prop += anno[j].attributes[0].nodeValue;
-                    prop += '<br>' + anno[j].innerHTML + '</br>';
-
-                }
-            }
-            document.getElementById("to").innerHTML = prop;
 
 
         </script>
