@@ -10,7 +10,7 @@
         <script>
             function PostsCtrlAjax($scope, $http)
             {
-              var url= 'http://serv21.ub.uni-heidelberg.de:8080/annotations/rest/de/fcr:transform/default3';
+              var url= 'http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/fcr:transform/default3';
               $http.get(url).success(function(data){ $scope.posts = data; });
             }
         </script>
