@@ -1,0 +1,41 @@
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIX  digi: <http://digi.ub.uni-heidelberg.de/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX  xs: <http://www.w3.org/2001/XMLSchema#>
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+
+
+<>  dc:text "test" .
+<>  dc:title "Title" .
+<> dc:identifier "http://google.de"^^xs:string . 
+<> dc:language "en"^^xs:string .
+<> oa:hasTarget  <digi:diglit/lehmann1756/0001/>^^xs:string .
+<> oa:motivatedBy 'oa:tagging' .
+<> oa:hasBody  <digi:tag1> .
+<> oa:hasBody  <digi:tag2> .
+<> oa:hasBody  <digi:tag3> .  
+<> oa:hasBody  <digi:tag4> .  
+<> oa:motivatedBy oa:editing .
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+

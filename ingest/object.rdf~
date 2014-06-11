@@ -1,0 +1,7 @@
+ 
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIx mods: <http://www.loc.gov/standards/mods/v3/>
+  
+<> dc:title "some-resource-title" .

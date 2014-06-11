@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery.parseXML demo</title>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+ 
+<p id="someElement"></p>
+<p id="anotherElement"></p>
+ 
+<script>
+/*
+//var xml = "<rss version='2.0'><channel><title>RSS Title</title></channel></rss>",
+//  xmlDoc = $.parseXML( xml ),
+   
+  $xml = $( xmlDoc ),
+  $title = $xml.find( "title" );
+ 
+// Append "RSS Title" to #someElement
+$( "#someElement" ).append( $title.text() );
+ 
+// Change the title to "XML Title"
+$title.text( "XML Title" );
+ 
+// Append "XML Title" to #anotherElement
+$( "#anotherElement" ).append( $title.text() );
+*/
+
+$.get('http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export/')
+  .done(function(data){
+    // parse the xml
+    data = $.parseXML(data);
+    //
+    // do anything you want with the parsed data
+  })
+  .fail(function(){
+    alert('something went wrong!');
+  })
+;
+
+
+</script>
+ 
+</body>
+</html>

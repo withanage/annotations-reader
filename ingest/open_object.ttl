@@ -1,0 +1,81 @@
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIX  digi: <http://digi.ub.uni-heidelberg.de/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX  xs: <http://www.w3.org/2001/XMLSchema#>
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+PREFIX cnt: <http://www.w3.org/2011/content#>
+PREFIX gnd: <http://d-nb.info/gnd/>
+PREFIX oax: <http://www.w3.org/ns/openannotation/extensions/> 
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
+
+
+
+<> dc:format "text/html" .
+<>  dc:title "Title" .
+
+<> a oa:Annotation ;
+    oa:hasTarget <digi:diglit/lehmann1756/0001> ;
+    oa:hasBody _:oa_body .
+    
+
+ _:oa_body a oa:Annotation ;
+    oa:hasSource <digi:/diglit/lehmann1756/0001> ;
+    dc:format "image/jpeg" ;
+    cnt:chars """
+    <?xml version="1.0" encoding="UTF-8"?>
+    <div id="uuid_7543987defcab9843abfed7599834">
+        Weit hinten, hinter den Wortbergen, fern der Länder Vokalien und Konsonantien leben die Blindtexte. 
+        Abgeschieden wohnen sie in Buchstabhausen an der Küste des Semantik, eines großen Sprachozeans.
+        Ein kleines Bächlein namens Duden fließt durch ihren Ort und versorgt sie mit den nötigen 
+        Regelialien. Es ist ein paradiesmatisches Land, in dem einem gebratene Satzteile in den Mund fliegen.
+        Nicht einmal von der allmächtigen Interpunktion werden die Blindtexte beherrscht – ein geradezu unorthographisches Leben.
+        Eines Tages aber beschloß eine kleine Zeile Blindtext, ihr Name war Lorem Ipsum, hinaus zu gehen in die weite Grammatik.
+        Der große Oxmox riet ihr davon ab, da es dort wimmele von bösen Kommata, wilden Fragezeichen und hinterhältigen Semikoli, 
+        doch das Blindtextchen ließ sich nicht beirren. Es packte seine sieben Versalien, schob sich sein Initial in den Gürtel und machte sich auf den Weg. 
+        Als es die ersten Hügel des Kursivgebirges erklommen hatte, warf es einen letzten Blick zurück auf die Skyline seiner Heimatstadt Buchstabhausen, 
+        die Headline von Alphabetdorf und die Subline seiner eigenen Straße, der Zeilengasse. Wehmütig lief ihm eine rhetorische Frage über die Wange, dann setzte es seinen Weg fort.
+        Unterwegs traf es eine Copy. Die Copy warnte das Blindtextchen, da, wo sie herkäme wäre sie 
+        </div>
+    
+    """;
+    
+    oa:hasBody _:oa_tag1;
+    oa:hasBody _:oa_tag2;
+    
+    oa:hasBody _:oa_comment1;
+
+    oa:motivatedBy oa:editing  ;
+    oa:motivatedBy oa:bookmarking ;
+    oa:motivatedBy  oa:classifying;
+    oa:motivatedBy  oa:commenting;
+    oa:motivatedBy  oa:describing;
+    oa:motivatedBy  oa:editing;
+    oa:motivatedBy  oa:highlighting;
+    oa:motivatedBy  oa:identifying;
+    oa:motivatedBy  oa:moderating;
+    oa:motivatedBy  oa:replying;
+    oa:motivatedBy  oa:tagging;
+    cnt:characterEncoding "utf-8" ;
+    dc:language "de" .
+
+_:oa_tag1 a oa:SemanticTag  ;
+    oax:hasSemanticTag  gnd:118529579 ;
+    oa:hasBody "Einstein, Albert";
+    
+    oa:hasTarget _:oa_body .
+
+_:oa_tag2 a oa:SemanticTag  ;
+    oax:hasSemanticTag  tags:heidelberg ;
+    oa:hasBody "Heidelberg";
+    oa:hasTarget _:oa_body ;
+    oax:exact "Blindtexte" ;
+    oax:prefix "Konsonantien leben die" ;
+    oax:suffix "Abgeschieden wohnen sie in" .
+  
+_:oa_comment1 a oax:Comment ;
+   oa:hasBody "This is a comment";
+   oa:hasTarget _:oa_body .
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+for i in {1..10}
+do
+
+
+#curl -X PUT  "http://localhost:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/$i"
+#curl -X PUT -H "Content-Type: text/turtle" --data-binary "@open_objectr.rdf" "http://localhost:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/$i"   
+
+curl -X PUT  "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/$i"
+curl -X PUT -H "Content-Type: text/turtle" --data-binary "@new-triples.rdf" "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/$i"   
+
+
+
+done

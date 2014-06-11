@@ -1,0 +1,2 @@
+ curl -X POST -H "Content-Type: application/rdf+ldpath" --data-binary "@post.txt" "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/fedora:system/fedora:transform/fedora:ldpath/default3/nt:base/fcr:content" 
+

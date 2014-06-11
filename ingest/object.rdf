@@ -1,0 +1,62 @@
+
+ 
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIx mods: <http://www.loc.gov/standards/mods/v3/>
+  
+DELETE { }
+INSERT { 
+  <> indexing:hasIndexingTransformation "default"; 
+  rdf:type indexing:indexable; 
+  dc:title "Test Annotation";
+  dc:creator "Dulip Withanage";
+  cnt:chars "Annotation content" ;
+  dc:format "text/plain"; 
+  oa:hasTarget  "http://digi.ub.uni-heidelberg.de/diglit/lehmann1756/0001/";
+
+}
+  	
+WHERE { 
+}
+
+
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIX  digi: <http://digi.ub.uni-heidelberg.de/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX  xs: <http://www.w3.org/2001/XMLSchema#>
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+
+
+<>  dc:text "test" .
+<>  dc:title "Title" .
+<> dc:identifier "http://google.de"^^xs:string . 
+<> dc:language "en"^^xs:string .
+<> oa:hasTarget  <digi:diglit/lehmann1756/0001/> .
+<> oa:motivatedBy 'oa:tagging' .
+<> oa:hasBody  <digi:tag1> .
+<> oa:hasBody  <digi:tag2> .
+<> oa:hasBody  <digi:tag3> .  
+<> oa:hasBody  <digi:tag4> .  
+<> oa:motivatedBy oa:editing .
+
+
+<>    a foaf:Person;
+       foaf:depiction <http://farm1.static.flickr.com/164/373663745_1801c2dddf.jpg?v=0>;
+       foaf:openid <http://openid.sun.com/bblfish> ;
+       foaf:gender "male";
+       foaf:birthday "07-29";
+       foaf:title "Mr";
+       foaf:family_name "Story";
+       foaf:givenname "Henry";
+       foaf:name "Henry J. Story";
+       foaf:homepage <http://bblfish.net/>;
+       foaf:schoolHomepage <http://www.bbk.ac.uk/phil/>,
+                           <http://www.doc.ic.ac.uk/>,
+                           <http://www.kcl.ac.uk/kis/schools/hums/philosophy/>;
+       foaf:mbox <mailto:henry.story@bblfish.net>,
+                 <mailto:henry.story@gmail.com>,
+                 <mailto:henry.story@sun.com>;
+       foaf:nick "bblfish"

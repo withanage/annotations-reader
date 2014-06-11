@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<_0:RDF
+   xmlns:morla="http://www.morlardf.net/morla#"
+   xmlns:_0="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+
+  <_0:Description _0:about="">
+    <morla:category xml:lang="den" _0:datatype="http://www.w3.org/2001/XMLSchema#anyURI">http://www.google.de</morla:category>
+  </_0:Description>
+
+</_0:RDF>
+
