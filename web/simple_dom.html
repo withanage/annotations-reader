@@ -14,8 +14,8 @@
              */
 
             HTTP_GET_VARS = get_params();
-            var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
-            //var repo_url = "http:///pers31.ub.uni-heidelberg.de:8080/rest/";
+            //var repo_url = "http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/";
+            var repo_url = "http:///pers31.ub.uni-heidelberg.de:8080/fedora/rest/";
             var resource = GET('resource');
             var full_url = repo_url + resource;
             var ns = "http://www.jcp.org/jcr/sv/1.0";
@@ -62,7 +62,7 @@
              * @param {type} ns
              * @param {type} tagName
              * @returns {unresolved}
-             */
+             */ 
             function checkUrl(url) {
                 var request = false;
                 if (window.XMLHttpRequest) {
@@ -130,7 +130,7 @@
                 }
 
                 //xmlhttp.open("GET", full_url + "/fcr:export", false);
-                xmlhttp.open("GET", full_url + "/fcr:transform/default3", false);
+                xmlhttp.open("GET", full_url + "/fcr:transform/default", false);
                 xmlhttp.send();
                 return  xmlhttp.responseXML;
             }

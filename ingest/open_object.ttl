@@ -58,7 +58,6 @@ PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
 _:oa_tag1 a oa:SemanticTag  ;
     oax:hasSemanticTag  gnd:118529579 ;
     oa:hasBody "Einstein, Albert";
-    
     oa:hasTarget _:oa_body .
 
 _:oa_tag2 a oa:SemanticTag  ;

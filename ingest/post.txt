@@ -1,11 +1,17 @@
 @prefix fcrepo : <http://fedora.info/definitions/v4/repository#>
 
-id      = . :: xsd:string ;
-title_tsi = dc:title :: xsd:string;
-text_tsi =  dc:description :: xsd:string;
-uuid_ssi = fcrepo:uuid :: xsd:string ;
-creator_tsi = dc:creator :: xsd:string;
-parent_id  = fcrepo:hasParent ::xsd:string;
-child_id = fcrepo: hasChild :: xsd:string;
-has_source = oa:hasSource:: xsd:string;
+dc_title = dc:title :: xsd:string;
+dc_description =  dc:description :: xsd:string;
+dc_format  =  dc:format :: xsd:string;
+dc_creator = dc:creator :: xsd:string;
+
+fcrepo_uuid = fcrepo:uuid :: xsd:string ;
+fcrepo_hasParent = fcrepo:hasParent ::xsd:string;
+fcrepo_hasChild = fcrepo:hasChild :: xsd:string;
+fcrepo_created  =  fcrepo:created :: xsd:string;
+fcrepo_createdBy =  fcrepo:createdBy :: xsd:string;
+fedora_hasAccessRoles  =  fedora:hasAccessRoles   :: xsd:string;
+fedora_writable  =  fedora: writable  :: xsd:string;
+fcrepo_mixinTypes =  fcrepo:mixinTypes   :: xsd:string;
+fcrepo_lastModified  =  fcrepo:lastModified   :: xsd:string;
 
