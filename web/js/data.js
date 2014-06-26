@@ -6,9 +6,10 @@
  */
 
 function Reader($scope, $http) {
-    var folder = '../../';
-    var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
-    var template ='default3';
+    var folder = '../';
+    //var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
+    var uuid = 'fedora/rest/16/';
+    var template ='default';
     $http.get(folder + uuid+ 'fcr:transform/'+template).
             success(function(data) {
                 $scope.annotation = data;

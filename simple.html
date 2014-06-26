@@ -10,7 +10,7 @@
         <script>
             function PostsCtrlAjax($scope, $http)
             {
-                var url = 'http://serv21.ub.uni-heidelberg.de:8080/fedora/rest/de/fcr:transform/default3';
+                var url = 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/fcr:transform/default';
                 $http.get(url).success(function(data) {
                     $scope.posts = data;
                 });
@@ -23,7 +23,7 @@
             <div class="panel-group" id="accordion">
                 <div class="panel">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-titlee">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                 Annotation  #1  <span class="badge pull-right">3</span>
                             </a>

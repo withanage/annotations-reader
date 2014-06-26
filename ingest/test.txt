@@ -1,0 +1,6 @@
+prefix fcrepo: <http://fedora.info/definitions/v4/repository#>
+select ?object where { 
+    ?ds fcrepo:mixinTypes "fedora:datastream" .
+    ?ds fcrepo:hasParent ?object . 
+    filter(str(?ds)=concat(str(?object),'/text')) 
+}

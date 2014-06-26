@@ -17,7 +17,11 @@ PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
 <>  dc:title "Title" .
 
 <> a oa:Annotation ;
+    oa:hasTarget <digi:diglit/lehmann1756/0001> ;
+    oa:hasBody _:oa_body .
     
+
+ _:oa_body a oa:Annotation ;
     oa:hasSource <digi:/diglit/lehmann1756/0001> ;
     dc:format "text/html" ;
     cnt:chars """
@@ -69,4 +73,7 @@ _:oa_tag2 a oa:SemanticTag  ;
     oax:prefix "Konsonantien leben die" ;
     oax:suffix "Abgeschieden wohnen sie in" .
   
+_:oa_comment1 a oa:Annotation ;
+   oa:hasBody "This is a comment";
+   oa:hasTarget _:oa_body .
 
