@@ -10,8 +10,4 @@ fcrepo_hasParent = fcrepo:hasParent ::xsd:string;
 fcrepo_hasChild = fcrepo:hasChild :: xsd:string;
 fcrepo_created  =  fcrepo:created :: xsd:string;
 fcrepo_createdBy =  fcrepo:createdBy :: xsd:string;
-fedora_hasAccessRoles  =  fedora:hasAccessRoles   :: xsd:string;
-fedora_writable  =  fedora: writable  :: xsd:string;
-fcrepo_mixinTypes =  fcrepo:mixinTypes   :: xsd:string;
 fcrepo_lastModified  =  fcrepo:lastModified   :: xsd:string;
-
