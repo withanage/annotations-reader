@@ -15,7 +15,7 @@ and open the template in the editor.
     </head>
     <body>
         <div id="annotationContainer" class="panel-group">
-            <div class="panel" id="panel"></div>
+          
         </div>
         <script type="text/javascript">
             var context = {
@@ -58,11 +58,11 @@ and open the template in the editor.
                             annotation_li: $("<li>", {class: "media"}),
                             image_link: $("<a>", {class: "pull-left", href: "#"}),
                             avatar: $("<img>", {class: "media-object", src: "test"}),
-                            media_body: $("<div>", {class: "media-body"}),
+                           
                             media_head: $("<h5>", {class: "media-heading"}),
                             media_title: $("<b>", {}),
                         };
-                       
+                        ac = document.getElementById('annotationContainer');
 
                         //add body
 
@@ -71,6 +71,9 @@ and open the template in the editor.
                         var annotationText = compacted;
                         for (var i = 1; i < n_elements; i++) {
                             var text = annotationText['@graph'][i]['cnt:#chars'];
+                            
+                            var panel_id = "panel_id_"+i;
+                            var panel ={panel: $("<div>",{class:"panel", id:panel_id})};
 
                             head.inner_annotations.appendTo(head.link);
                             head.link.appendTo(head.title);
@@ -84,13 +87,18 @@ and open the template in the editor.
                             body.annotation_li.appendTo(body.media_list);
 
                             body.media_title.appendTo(body.media_head);
-                            body.media_head.appendTo(body.media_body);
-                            body.media_body.appendTo(body.media_list);
+                            var media_body_id = 'media_body_id_'+i;
+                            var m_body = {media_body: $("<div>", {class: "media-body", id:media_body_id})}
+                            
+                            body.media_head.appendTo(m_body.media_body);
+                            //m_body.innerHTML= text;
+                            m_body.media_body.appendTo(body.media_list);
 
                             body.media_list.appendTo(body.body);
                             body.body.appendTo(body.wrap);
-                            var ac = document.getElementById('panel');
-                            body.wrap.appendTo(ac);
+                            body.wrap.appendTo(panel.panel);
+                            panel.panel.appendTo(ac);
+                            
                             console.log(ac);
                             //console.log(i, JSON.stringify(text));
                             //document.getElementById("annotation1").innerHTML = text;
@@ -119,7 +127,7 @@ and open the template in the editor.
         </script>
 
 
-        <!--div class="panel-group" id="accordion">
+        <div class="panel-group" id="accordion">
             <div class="panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -146,7 +154,7 @@ and open the template in the editor.
                 </div>
             </div>
 
-        </div-->
+        </div>
         <!--to load faster-->
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>
