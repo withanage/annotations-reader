@@ -29,9 +29,16 @@ and open the template in the editor.
                     'Accept': 'application/ld+json'
                 },
                 success: function(data) {
-                    console.log(data,data);
+                    //console.log(data, data);
+                    console.log('users', data[1]['http://www.w3.org/2011/content#chars'][0]['@value']);
+
+                    jsonld.flatten(data, function(err, flattened) {
+                        // all deep-level trees flattened to the top-level
+                        //console.log('data',flattened)
+                    });
+
                     jsonld.compact(data, context, function(err, compacted) {
-                        console.log(JSON.stringify(compacted, null, 2));
+                        // console.log(JSON.stringify(compacted, null, 2));
                     });
                     jsonld.processContext(null, [null, context], function(err, ctx) {
                         if (err) {
@@ -39,8 +46,8 @@ and open the template in the editor.
                             return;
                         }
                         var value = jsonld.getContextValue(ctx, 'name:#created', '@value');
-                        console.log('value' , ctx);
-                        //console.log('users', data[0]['http://fedora.info/definitions/v4/repository#created'][0]['@value']);
+                        //console.log('value', value);
+                        //console.log('users', data[0]['http://www.w3.org/2011/content#chars'][0]['@value']);
                     });
                 }
             });
@@ -49,15 +56,15 @@ and open the template in the editor.
                     "onto": "http://example.com/onto#",
                     "users": {"@id": "onto:users", "@type": "@id"}
                 },
-                "users": "http://example.com/users"
+                "users": "http://example.com/users/dfdsfdsf"
             };
-            jsonld.processContext(null, [null, data2['@context']], function(err, ctx) {
+            jsonld.processContext(null, [null, data2], function(err, ctx) {
                 if (err) {
                     console.log('error', err);
                     return;
                 }
-                var value = jsonld.getContextValue(ctx, 'users', '@id');
-                //console.log('users', value);
+                var value = jsonld.getContextValue(ctx, 'users', 'users');
+                //console.log('users', data2);
             });
 
         </script>
