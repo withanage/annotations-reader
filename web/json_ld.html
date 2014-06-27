@@ -6,22 +6,27 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>JSON-LD</title>
+        <title>Annotations</title>
         <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
         <script src=https://code.jquery.com/jquery-2.1.1.min.js></script>
-
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>JSON-LD</div>
-
-
+        <div id="annotationContainer" class="panel-group">
+            <div class="panel" id="panel"></div>
+        </div>
         <script type="text/javascript">
             var context = {
-                "name": "http://fedora.info/definitions/v4/repository"
+                "fcrepo": "http://fedora.info/definitions/v4/repository",
+                "cnt": 'http://www.w3.org/2011/content',
+                "rest": 'http://fedora.info/definitions/v4/rest-api',
+                "ldp": "http://www.w3.org/ns/ldp",
+                "dc": "http://purl.org/dc/elements/1.1/",
+                "oa": "http://www.w3.org/ns/oa",
+                "mixin": "http://www.jcp.org/jcr/mix/1.0",
             };
-
             $.ajax({
                 type: 'GET',
                 url: "../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/",
@@ -30,43 +35,119 @@ and open the template in the editor.
                 },
                 success: function(data) {
                     //console.log(data, data);
-                    console.log('users', data[1]['http://www.w3.org/2011/content#chars'][0]['@value']);
-
-                    jsonld.flatten(data, function(err, flattened) {
-                        // all deep-level trees flattened to the top-level
-                        //console.log('data',flattened)
-                    });
+                    //var annotationText = data[9][context['annotation_text']][0]['@value'];
+                    //document.getElementById("annotation1").innerHTML = annotationText;
+                    //jsonld.flatten(data, function(err, flattened) {
+                    // all deep-level trees flattened to the top-level
+                    //console.log('data',flattened)
+                    //});
 
                     jsonld.compact(data, context, function(err, compacted) {
-                        // console.log(JSON.stringify(compacted, null, 2));
-                    });
-                    jsonld.processContext(null, [null, context], function(err, ctx) {
-                        if (err) {
-                            console.log('error', err);
-                            return;
+
+                        //
+                        var head = {
+                            panel_heading: $("<div>", {class: "panel-heading"}),
+                            title: $("<h4>", {class: "panel-title"}),
+                            link: $("<a>", {}),
+                            inner_annotations: $("<span>", {class: "badge pull-right"}),
+                        };
+                        var body = {
+                            wrap: $("<div>", {class: "panel-collapse collapse in"}),
+                            body: $("<div>", {class: "panel-body"}),
+                            media_list: $("<ul>", {class: "media-list"}),
+                            annotation_li: $("<li>", {class: "media"}),
+                            image_link: $("<a>", {class: "pull-left", href: "#"}),
+                            avatar: $("<img>", {class: "media-object", src: "test"}),
+                            media_body: $("<div>", {class: "media-body"}),
+                            media_head: $("<h5>", {class: "media-heading"}),
+                            media_title: $("<b>", {}),
+                        };
+                       
+
+                        //add body
+
+
+                        var n_elements = data.length;
+                        var annotationText = compacted;
+                        for (var i = 1; i < n_elements; i++) {
+                            var text = annotationText['@graph'][i]['cnt:#chars'];
+
+                            head.inner_annotations.appendTo(head.link);
+                            head.link.appendTo(head.title);
+                            head.title.appendTo(head.panel_heading);
+
+                            //add header
+                            head.panel_heading.appendTo(ac);
+
+                            body.avatar.appendTo(body.image_link);
+                            body.image_link.appendTo(body.annotation_li);
+                            body.annotation_li.appendTo(body.media_list);
+
+                            body.media_title.appendTo(body.media_head);
+                            body.media_head.appendTo(body.media_body);
+                            body.media_body.appendTo(body.media_list);
+
+                            body.media_list.appendTo(body.body);
+                            body.body.appendTo(body.wrap);
+                            var ac = document.getElementById('panel');
+                            body.wrap.appendTo(ac);
+                            console.log(ac);
+                            //console.log(i, JSON.stringify(text));
+                            //document.getElementById("annotation1").innerHTML = text;
                         }
-                        var value = jsonld.getContextValue(ctx, 'name:#created', '@value');
-                        //console.log('value', value);
-                        //console.log('users', data[0]['http://www.w3.org/2011/content#chars'][0]['@value']);
+                        console.log(JSON.stringify(compacted, null, 2));
                     });
+
+                    /**
+                     jsonld.processContext(null, [null, context], function(err, ctx) {
+                     if (err) {
+                     console.log('error', err);
+                     return;
+                     }
+                     var value = jsonld.getContextValue(ctx, 'name:#created', '@value');
+                     console.log('value', value);
+                     console.log('users', data[0]['http://www.w3.org/2011/content#chars'][0]['@value']);
+                     });
+                     **/
                 }
-            });
-            var data2 = {
-                "@context": {
-                    "onto": "http://example.com/onto#",
-                    "users": {"@id": "onto:users", "@type": "@id"}
-                },
-                "users": "http://example.com/users/dfdsfdsf"
-            };
-            jsonld.processContext(null, [null, data2], function(err, ctx) {
-                if (err) {
-                    console.log('error', err);
-                    return;
-                }
-                var value = jsonld.getContextValue(ctx, 'users', 'users');
-                //console.log('users', data2);
             });
 
+
+
+
+
         </script>
+
+
+        <!--div class="panel-group" id="accordion">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            Annotation  #1  <span class="badge pull-right">3</span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
+
+                        <ul class="media-list">
+                            <li class="media">
+                                <a class="pull-left" href="#">
+                                    <img class="media-object" data-src="holder.js/24x24" alt="24x24" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIj48L3JlY3Q+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 24px; height: 24px;">
+                                </a>
+                                <div class="media-body" id="annotation1">
+                                    <h5 class="media-heading"><b>Titel</b></h5>
+
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div-->
+        <!--to load faster-->
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>
 </html>
