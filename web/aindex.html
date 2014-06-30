@@ -26,15 +26,17 @@ and open the template in the editor.
         <div ng-controller="MainCtrl">
             <accordion close-others="oneAtATime">
 
-                <accordion-group heading="{{post['dc:title']}} {{post['@id']}}" ng-repeat="post in posts['@graph']"  >
+                <accordion-group heading="{{post['dc:title']}}  ({{post['@id']}})" ng-repeat="post in posts['@graph']"  >
                     <p> {{post['cnt:#chars']}}</p>
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
                     <button class="btn btn-info  btn-sm">{{post['oax:hasSemanticTag']['@id']}}</button>
                     <button class="btn btn-info  btn-sm">{{post['oax:hasSemanticTag']}}</button>
-                    <button class="btn btn-default"  ng-repeat="annotation in post['oa:#hasBody']">{{annotation['@id']}}</button>
+                    <button class="btn btn-default"  ng-repeat="annotation in post['oa:#hasBody']"  ng-click="get_body()" >{{annotation['@id']}}</button>
                 </accordion-group>
+                
+                <
 
             </accordion>
         </div>

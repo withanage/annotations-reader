@@ -28,12 +28,19 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
         isFirstOpen: true,
         isFirstDisabled: false
     };
-    fetchfedora.fetch().then(function(data) {
+
+    url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001';
+    fetchfedora.fetch(url).then(function(data) {
         $scope.posts = data;
         console.log(data);
     })
 });
 
+function get_body ($scope, $timeout) {    
+  $scope.addType = function(){
+      requestHelper.addType();
+  };
+};
 
 readerApp.factory('fetchfedora', function($q, $timeout, $http) {
 
@@ -54,8 +61,7 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
 
             var deferred = $q.defer();
             var headers = {"Accept": "application/ld+json"};
-            $http.defaults.headers.get = headers;
-            url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001';
+
             $timeout(function() {
                 $http.get(url, headers).success(function(data) {
                     jsonld.compact(data, context, function(err, compacted) {
@@ -73,9 +79,7 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
 
 
 
-
-
-
+/**
 
 function readerCtrl($scope, $http) {
     var context = {
@@ -124,3 +128,4 @@ function Reader($scope, $http) {
 }
 
 
+**/
