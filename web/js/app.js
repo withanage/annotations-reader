@@ -29,16 +29,15 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
         isFirstDisabled: false
     };
     fetchfedora.fetch().then(function(data) {
-
         $scope.posts = data;
+        console.log(data);
     })
 });
 
 
 readerApp.factory('fetchfedora', function($q, $timeout, $http) {
 
-    headers = {'Accept': 'application/ld+json'};
-    url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
+
     var context = {
         "fcrepo": "http://fedora.info/definitions/v4/repository",
         "cnt": 'http://www.w3.org/2011/content',
@@ -47,20 +46,19 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
         "dc": "http://purl.org/dc/elements/1.1/",
         "oa": "http://www.w3.org/ns/oa",
         "mixin": "http://www.jcp.org/jcr/mix/1.0",
+        "oax": 'http://www.w3.org/ns/openannotation/extensions/',
     };
 
     var Webtest = {
         fetch: function(callback) {
 
             var deferred = $q.defer();
-
+            var headers = {"Accept": "application/ld+json"};
+            $http.defaults.headers.get = headers;
+            url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001';
             $timeout(function() {
-                $http.get(url).success(function(data) {
-
+                $http.get(url, headers).success(function(data) {
                     jsonld.compact(data, context, function(err, compacted) {
-                        //$scope.posts = compacted;
-
-
                         deferred.resolve(compacted);
                     });
                 });
@@ -117,7 +115,7 @@ function readerCtrl($scope, $http) {
 function Reader($scope, $http) {
     var folder = '../';
     //var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
-    var uuid = 'fedora/rest/16/';
+    var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/';
     var template = 'default';
     $http.get(folder + uuid + 'fcr:transform/' + template).
             success(function(data) {
