@@ -14,7 +14,7 @@ PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
 
 
 <> dc:format "text/html" .
-<>  dc:title "Title" .
+<>  dc:title "Test Titel" .
 
 <> a oa:Annotation ;
     
