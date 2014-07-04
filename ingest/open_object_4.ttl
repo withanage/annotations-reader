@@ -14,7 +14,7 @@ PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
 
 
 <> dc:format "text/html" .
-<>  dc:title "Titel Eins " .
+<>  dc:title "AnderesTitel  Vier " .
 
 <> a oa:Annotation ;
     
@@ -61,8 +61,8 @@ _:oa_tag1 a oa:SemanticTag  ;
     oa:hasTarget _:oa_body .
 
 _:oa_tag2 a oa:SemanticTag  ;
-    oax:hasSemanticTag  tags:Blindtexte ;
-    oa:hasBody "Blindtexte";
+    oax:hasSemanticTag  tags:heidelberg ;
+    oa:hasBody "Heidelberg";
     oa:hasTarget _:oa_body ;
     oax:exact "Blindtexte" ;
     oax:prefix "Konsonantien leben die" ;

@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  * 
+ * 
+ * TODO: automatische tags zur markiterung
  */
 
 var readerApps = angular.module('readerApp', ['ui.bootstrap', 'ngTouch'], function($httpProvider) {
@@ -28,13 +30,12 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
         isFirstOpen: true,
         isFirstDisabled: false
     };
-
+    $scope.posts = {};
     url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
     fetchfedora.fetch(url).then(function(data) {
         $scope.posts = data;
         //console.log(data);
     });
-    
     $scope.tags = [];
     $scope.getdata = function(url, values) {
 
@@ -55,11 +56,22 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
             });
             //this.push(key + ': ' + value);
         });
-        };
+        /**
+         
+         fetchfedora.fetch(annotationbody).then(function(data) {
+         
+         //console.log(values);
+         angular.forEach(values, function(value, key) {
+         console.log(value);
+         }
+         );
+         });
+         **/
+    };
+
 });
 
-
-readerApp.factory('fetchfedora', function($q, $timeout, $http) {
+readerApp.factory('fetchfedora', function($q, $http) {
 
 
     var context = {
@@ -76,11 +88,11 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
     var Webtest = {
         fetch: function(url) {
             var deferred = $q.defer();
-            var config = {headers:{"Accept": "application/ld+json"}};
+            var config = {headers: {"Accept": "application/ld+json"}};
 
-            $http.get(url,config).success(function(data) {
-                console.log(data);
-                jsonld.compact(data, context, function(err, compacted) {
+            $http.get(url, config).success(function(data) {
+                //console.log(data);
+                jsonld.compact(data, context, function(compacted) {
                     deferred.resolve(compacted);
                 });
             });
@@ -90,6 +102,15 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
 
     return Webtest;
 });
+
+readerApp.config(['$httpProvider', function($httpProvider) {
+        //initialize get if not there
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+        //disable IE ajax request caching
+        $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+    }]);
 
 
 

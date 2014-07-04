@@ -36,8 +36,7 @@ and open the template in the editor.
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
-                    <button class="btn btn-info  btn-sm">{{post['oax:hasSemanticTag']['@id']}}</button>
-                    <button class="btn btn-info  btn-sm">{{post['oax:hasSemanticTag']}}</button>
+                  <button class="btn btn-info  btn-sm">{{post['oax:hasSemanticTag']}}</button>
                     <button class="btn btn-default"  ng-repeat="annotation in post['oa:#hasBody']"  ng-click="get_body(post['@id'])" >{{annotation['@id']}}</button>
                 </accordion-group>
             </accordion>
