@@ -34,7 +34,7 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
         $scope.posts = data;
         //console.log(data);
     });
-    
+
     $scope.tags = [];
     $scope.getdata = function(url, values) {
 
@@ -42,20 +42,16 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora) {
             //console.log(value['@id']);
             fetchfedora.fetch(value['@id']).then(function(data) {
                 var tag = data['@graph']['0']['oa:#hasBody'];
-                //var tag = data['@graph']['0']['oa:#hasBody'];
                 if (angular.isUndefined(tag)) {
                     console.log(tag);
-
                 }
                 else {
-                    //console.log("defined", tag);
                     $scope.tags.push(tag);
                 }
                 ;
             });
-            //this.push(key + ': ' + value);
         });
-        };
+    };
 });
 
 
@@ -76,9 +72,9 @@ readerApp.factory('fetchfedora', function($q, $timeout, $http) {
     var Webtest = {
         fetch: function(url) {
             var deferred = $q.defer();
-            var config = {headers:{"Accept": "application/ld+json"}};
+            var config = {headers: {"Accept": "application/ld+json"}};
 
-            $http.get(url,config).success(function(data) {
+            $http.get(url, config).success(function(data) {
                 console.log(data);
                 jsonld.compact(data, context, function(err, compacted) {
                     deferred.resolve(compacted);
