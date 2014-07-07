@@ -24,14 +24,14 @@ and open the template in the editor.
         <nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid"></div>
         </nav>
-        <input type="search" ng-model="q" placeholder="Suche in Annotationen" class="form-control"/>
+        <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
     
         <div ng-controller="MainCtrl">
             
             <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
             <accordion close-others="oneAtATime">
 
-                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts['@graph']| filter:q" ng-click='getdata()' >
+                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts['@graph']| filter:search:strict" ng-click='getdata(post["@id"], post["oa:#hasBody"])' >
                     <p> {{post['cnt:#chars']}}</p>
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
