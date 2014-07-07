@@ -36,37 +36,27 @@ and open the template in the editor.
                     
                     <h4 class="modal-title" id="myAnnotationLabel">Annotation</h4>
                 </div>
-                <div class="modal-body"  style="height:100%">
+                <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                                <!--label for="inputtext" class="col-sm-2 control-label">Text</label-->
                                 <div class="col-lg-12">
                                     <textarea class="form-control" style="height: 400px;">
                                     </textarea>    
-                                    </div>
-                            </div>
+                                </div>
                         </div>
-                    
-                    
-                    
+                     <button class="btn btn-default" ng-click="ok()">Einfügen</button>
+                </form>
                 </div>
-                                    
-                <!--ul>
-                <li ng-repeat="item in items">
-                <a ng-click="selected.item = item">{{ item }}</a>
-                </li>
-                </ul>
-                Selected: <b>{{ selected.item }}</b>
-                -->
+              
                 
                 <div class="modal-footer">
-                <button class="btn btn-default" ng-click="ok()">Einfügen</button>
+               
                 <button class="btn btn-default" ng-click="cancel()">Abbrechen</button>
-                </form>
+             
                 
              </div>
             </script>
-            <button class="btn btn-info" ng-click="open()">Annotation Einfügen</button>
+            <button class="btn btn-info" ng-click="open('lg')">Annotation Einfügen</button>
             <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
 
             <accordion close-others="oneAtATime">

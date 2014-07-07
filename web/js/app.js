@@ -57,12 +57,12 @@ readerApp.controller('MainCtrl', function($scope, fetchfedora, $modal, $log) {
     //modal
     $scope.items = ['item1', 'item2', 'item3'];
 
-    $scope.open = function() {
+    $scope.open = function(size) {
 
         var modalInstance = $modal.open({
             templateUrl: 'myModalContent.html',
             controller: ModalInstanceCtrl,
-            size: 'lg',
+            size: size,
             resolve: {
                 items: function() {
                     return $scope.items;
