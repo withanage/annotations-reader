@@ -27,10 +27,9 @@ and open the template in the editor.
 
             var readerApp = angular.module('readerApp', ['ui.bootstrap', 'ngTouch']);
 
-            readerApp.controller('UserController', function($scope, $http) {
+            readerApp.controller('FormController', function($scope, $http) {
                 $scope.submit = function() {
-                    //$http.defaults.headers.post["Content-Type"] = "application/ld+json", 
-
+                    $scope.title = this.title;
                     $scope.text = this.text;
 
                     $scope.data = [{
@@ -43,13 +42,13 @@ and open the template in the editor.
                                     "@value": "de"
                                 }],
                             "http://purl.org/dc/elements/1.1/title": [{
-                                    "@value": $scope.text
+                                    "@value": $scope.title
                                 }],
                             "http://www.w3.org/2011/content#characterEncoding": [{
                                     "@value": "utf-8"
                                 }],
                             "http://www.w3.org/2011/content#chars": [{
-                                    "@value": ""
+                                    "@value": $scope.text
                                 }]
 
                         }];
@@ -79,7 +78,7 @@ and open the template in the editor.
 
 
 
-        <form ng-submit="submit()" ng-controller="UserController">
+        <form ng-submit="submit()" ng-controller="FormController">
             Enter text and hit enter:
             <input type="text" ng-model="text" name="text" />
             <input type="submit" id="submit" value="Submit" />
