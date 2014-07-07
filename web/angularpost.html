@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="readerApp">
+    <head>
+        <title>Annotations Applications</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
+        <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-touch.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+        <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
+        <script src="js/app.js"></script>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
+    </head>
+    <body>
+
+
+        <script>
+
+            var readerApp = angular.module('readerApp', ['ui.bootstrap', 'ngTouch']);
+
+            readerApp.controller('UserController', function($scope, $http) {
+                $scope.submit = function() {
+                    //$http.defaults.headers.post["Content-Type"] = "application/ld+json", 
+
+                    $scope.text = this.text;
+
+                    $scope.data = [{
+                            "@id": "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6",
+                            "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
+                            "http://purl.org/dc/elements/1.1/format": [{
+                                    "@value": "text/html"
+                                }],
+                            "http://purl.org/dc/elements/1.1/language": [{
+                                    "@value": "de"
+                                }],
+                            "http://purl.org/dc/elements/1.1/title": [{
+                                    "@value": $scope.text
+                                }],
+                            "http://www.w3.org/2011/content#characterEncoding": [{
+                                    "@value": "utf-8"
+                                }],
+                            "http://www.w3.org/2011/content#chars": [{
+                                    "@value": ""
+                                }]
+
+                        }];
+
+
+                    $http({
+                        method: 'PUT',
+                        url: 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6',
+                        data: $scope.data,
+                        headers: {
+                            'Content-Type': 'application/ld+json'
+
+                        }
+                    }).success(function(data) {
+                        console.log("OK", $scope.data)
+
+                    }).error(function(err) {
+                        "ERR", console.log(err)
+                    })
+
+                };
+
+            });</script>
+
+
+
+
+
+
+        <form ng-submit="submit()" ng-controller="UserController">
+            Enter text and hit enter:
+            <input type="text" ng-model="text" name="text" />
+            <input type="submit" id="submit" value="Submit" />
+            <pre>list={{list}}</pre>
+        </form>
+
+    </body>
+</html>

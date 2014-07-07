@@ -136,6 +136,89 @@ readerApp.factory('fetchfedora', function($q, $http) {
 });
 
 
+readerApp.factory('debounce', function($timeout, $q) {
+    return function(func, wait, immediate) {
+        var timeout;
+        var deferred = $q.defer();
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if(!immediate) {
+                    deferred.resolve(func.apply(context, args));
+                    deferred = $q.defer();
+                }
+            };
+            var callNow = immediate && !timeout;
+            if ( timeout ) {
+                $timeout.cancel(timeout);
+            }
+            timeout = $timeout(later, wait);
+            if (callNow) {
+                deferred.resolve(func.apply(context,args));
+                deferred = $q.defer();
+            }
+            return deferred.promise;
+        };
+    };
+});
+
+
+readerApp.controller('WordCtrl', function ($scope, debounce) {
+
+    $scope.words = [];
+    $scope.sentence = '';
+
+    // this is called when the textarea is changed
+    // it splits up the textarea's text and updates $scope.words 
+    $scope.parseSentence = function() {
+
+        var words = $scope.sentence.split(/\s+/g);
+        var wordObjects = [];
+
+        for (var i = 0; i < words.length; i++) {
+            wordObjects.push({word: words[i]});
+        }
+
+        if ((words.length == 1) && (words[0] === '')) {
+            // do not render any inputs when the sentence has no words
+            $scope.words = [];
+        } else {
+            $scope.words = wordObjects;
+        }
+
+    };
+
+    $scope.parseSentenceDebounced = debounce($scope.parseSentence, 700, false);
+
+    $scope.buildSentance = function(w) {
+
+        var words = [];
+
+        for (var i = 0; i < $scope.words.length; i++) {
+            var word = $scope.words[i].word;
+            if (word.replace(/\s+/g, '') !== '') {
+                words.push(word);
+            }
+        }
+
+        $scope.sentence = words.join(' ');
+
+        // debounce the call to parseSentenceDebounced
+        // so that it only gets called after the user
+        // has stopped typing instead of with every keypress
+        $scope.parseSentenceDebounced();
+
+    }
+
+    $scope.parseSentence();
+
+
+
+
+
+});
+
 
 /**
  
