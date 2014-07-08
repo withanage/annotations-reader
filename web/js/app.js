@@ -1,3 +1,4 @@
+'use strict';
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,102 +6,14 @@
  * 
  */
 
-var readerApps = angular.module('readerApp', ['ui.bootstrap', 'ngTouch'], function($httpProvider) {
-    FastClick.attach(document.body);
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-}).run(['$location', function($location) {
-        //Allows us to navigate to the correct element on initialization
-        if ($location.path() !== '' && $location.path() !== '/') {
-            smoothScroll(document.getElementById($location.path().substring(1)), 500, function(el) {
-                location.replace(el.id);
-            });
-        }
-    }]);
 
+var readerApp = angular.module('readerApp',
+        ['ui.bootstrap',
+            'ngTouch',
+            'readerAppControllers',
+            
+        ]);
 
-
-var readerApp = angular.module('readerApp', ['ui.bootstrap', 'ngTouch']);
-
-readerApp.controller('MainCtrl', function($scope, fetchfedora, $modal, $log) {
-    $scope.oneAtATime = true;
-
-    $scope.status = {
-        isFirstOpen: true,
-        isFirstDisabled: false
-    };
-
-    url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
-    fetchfedora.fetch(url).then(function(data) {
-        $scope.posts = data;
-        //console.log(data);
-    });
-
-    $scope.tags = [];
-    $scope.getdata = function(url, values) {
-
-        angular.forEach(values, function(value, key) {
-            //console.log(value['@id']);
-            fetchfedora.fetch(value['@id']).then(function(data) {
-                var tag = data['@graph']['0']['oa:#hasBody'];
-                if (angular.isUndefined(tag)) {
-                    console.log(tag);
-                }
-                else {
-                    $scope.tags.push(tag);
-                }
-                ;
-            });
-        });
-    };
-
-
-    //modal
-    $scope.items = ['item1', 'item2', 'item3'];
-
-    $scope.open = function(size) {
-
-        var modalInstance = $modal.open({
-            templateUrl: 'myModalContent.html',
-            controller: ModalInstanceCtrl,
-            size: size,
-            resolve: {
-                items: function() {
-                    return $scope.items;
-                }
-            }
-        });
-
-        modalInstance.result.then(function(selectedItem) {
-            $scope.selected = selectedItem;
-        }, function() {
-            $log.info('Modal dismissed at: ' + new Date());
-        });
-    };
-
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-    var ModalInstanceCtrl = function($scope, $modalInstance, items) {
-
-        $scope.items = items;
-        $scope.selected = {
-            item: $scope.items[0]
-        };
-
-        $scope.ok = function() {
-            $modalInstance.close($scope.selected.item);
-        };
-
-        $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
-        };
-    };
-
-    //end modal
-
-
-});
 
 
 readerApp.factory('fetchfedora', function($q, $http) {
@@ -144,18 +57,18 @@ readerApp.factory('debounce', function($timeout, $q) {
             var context = this, args = arguments;
             var later = function() {
                 timeout = null;
-                if(!immediate) {
+                if (!immediate) {
                     deferred.resolve(func.apply(context, args));
                     deferred = $q.defer();
                 }
             };
             var callNow = immediate && !timeout;
-            if ( timeout ) {
+            if (timeout) {
                 $timeout.cancel(timeout);
             }
             timeout = $timeout(later, wait);
             if (callNow) {
-                deferred.resolve(func.apply(context,args));
+                deferred.resolve(func.apply(context, args));
                 deferred = $q.defer();
             }
             return deferred.promise;
@@ -164,7 +77,7 @@ readerApp.factory('debounce', function($timeout, $q) {
 });
 
 
-readerApp.controller('WordCtrl', function ($scope, debounce) {
+readerApp.controller('WordCtrl', function($scope, debounce) {
 
     $scope.words = [];
     $scope.sentence = '';
