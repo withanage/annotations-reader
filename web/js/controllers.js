@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route) {
+readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location) {
     $scope.oneAtATime = true;
 
     $scope.status = {
@@ -16,24 +16,32 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
 
 
-    url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
+    var prefix = '/fedora/rest/';
+    var collection = 'de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001';
+    var url = $location.$$host +prefix + collection;
+    var child_url = $location.$$host + '/' + collection + '/' + '6';
+    console.log(child_url);
+    //console.log ($location);
+    console.log ($route);
     fetchfedora.fetch(url).then(function(data) {
         //cut the main element
         $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-        //
+        sort_text = 'fcrepo:#created';
         $scope.posts.sort(function(a, b) {
-            if (a['fcrepo:#created'] < b['fcrepo:#created'])
+            if (a[sort_text] < b[sort_text])
                 return 1;
-            if (a['fcrepo:#created'] > b['fcrepo:#created'])
+            if (a[sort_text] > b[sort_text])
                 return -1;
-          
+
             return 0;
         });
-        console.log("after", $scope.posts);
+        //console.log("after", $scope.posts);
+        console.log("location", $location);
         //
         $scope.posts = $scope.posts.sort();
 
     });
+
 
 
     //form
@@ -42,7 +50,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         $scope.text = this.text;
 
         $scope.data = [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6",
+                "@id": child_url,
                 "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
                 "http://purl.org/dc/elements/1.1/format": [{
                         "@value": "text/html"
@@ -65,7 +73,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
         $http({
             method: 'PUT',
-            url: 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6',
+            url: child_url,
             data: $scope.data,
             headers: {
                 'Content-Type': 'application/ld+json'
