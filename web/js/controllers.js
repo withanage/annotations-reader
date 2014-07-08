@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log) {
+readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route) {
     $scope.oneAtATime = true;
 
     $scope.status = {
@@ -17,8 +17,69 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
     url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
     fetchfedora.fetch(url).then(function(data) {
         $scope.posts = data;
+        //$scope.predicate = '-@id';
         //console.log(data);
     });
+
+
+    //form
+    $scope.submit = function() {
+        $scope.title = this.title;
+        $scope.text = this.text;
+
+        $scope.data = [{
+                "@id": "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6",
+                "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
+                "http://purl.org/dc/elements/1.1/format": [{
+                        "@value": "text/html"
+                    }],
+                "http://purl.org/dc/elements/1.1/language": [{
+                        "@value": "de"
+                    }],
+                "http://purl.org/dc/elements/1.1/title": [{
+                        "@value": $scope.title
+                    }],
+                "http://www.w3.org/2011/content#characterEncoding": [{
+                        "@value": "utf-8"
+                    }],
+                "http://www.w3.org/2011/content#chars": [{
+                        "@value": $scope.text
+                    }]
+
+            }];
+
+
+        $http({
+            method: 'PUT',
+            url: 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6',
+            data: $scope.data,
+            headers: {
+                'Content-Type': 'application/ld+json'
+
+            }
+        }).success(function(data) {
+            console.log("OK", $scope.data)
+
+        }).error(function(err) {
+            "ERR", console.log(err)
+        });
+
+
+        fetchfedora.fetch(url).then(function(data) {
+            $scope.posts = "";
+            console.log("debug",$scope.posts);
+        });
+        $route.reload();
+        $window.location.reload();
+
+    };
+
+
+
+
+
+
+
 
     $scope.tags = [];
     $scope.getdata = function(url, values) {
@@ -125,3 +186,6 @@ readerAppControllers.controller('WordCtrl', function($scope, debounce) {
     $scope.parseSentence();
 
 });
+
+
+

@@ -58,10 +58,24 @@ and open the template in the editor.
              </div>
             </script>
             <button class="btn btn-info" ng-click="open('lg')">Annotation Einfügen</button>
+            <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>
+            <div collapse="isCollapsed">
+                <div class="well well-lg">
+                    <form ng-submit="submit()" ng-controller="FormController">
+                        Enter text and hit enter:
+                        <input type="text" ng-model="title" name="title" />
+                        <input type="text" ng-model="text" name="text" />
+                         <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                    </form>
+                </div>
+            </div>
+
+
+
             <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
 
             <accordion close-others="oneAtATime">
-                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts['@graph']| filter:search:strict" ng-click='getdata(post["@id"], post["oa:#hasBody"])' >
+                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts['@graph']| filter:search:strict" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
                     <p> {{post['cnt:#chars']}}</p>
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>

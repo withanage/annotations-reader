@@ -1,0 +1,13 @@
+<div>
+    {{count}}
+<accordion close-others="oneAtATime">
+                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts['@graph']| filter:search:strict" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
+                    <p> {{post['cnt:#chars']}}</p>
+
+                    <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
+                    <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
+
+                    <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
+                </accordion-group>
+</accordion>
+</div>

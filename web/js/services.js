@@ -9,7 +9,7 @@
 
 /* Services */
 
-var readerAppServices = angular.module('readerAppServices',[]);
+var readerAppServices = angular.module('readerAppServices', []);
 
 
 readerAppServices.factory('fetchfedora', function($q, $http) {
@@ -32,15 +32,17 @@ readerAppServices.factory('fetchfedora', function($q, $http) {
             var config = {headers: {"Accept": "application/ld+json"}};
 
             $http.get(url, config).success(function(data) {
-                console.log(data);
+
                 jsonld.compact(data, context, function(err, compacted) {
                     deferred.resolve(compacted);
+                    console.log(compacted);
                 });
             });
+
             return deferred.promise;
         }
     };
-
+    console.log(jsonld_download);
     return jsonld_download;
 });
 

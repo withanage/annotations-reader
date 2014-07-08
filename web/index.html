@@ -1,20 +1,69 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <!doctype html>
-<html ng-app>
-	<head>
-		<title>Annotations</title>
-		<script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
-    	<script src="js/app.js"></script>
-	</head>
+<html ng-app="readerApp">
+    <head>
+        <title>Annotations Applications</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<body>
-		<div ng-controller="Reader">
-			<p>The ID is {{annotation.id}}</p>
-                        <p>Title is {{annotation.title_tsi}}</p>
-                        <p>Text is {{annotation.text_tsi}}</p>
-                        <p>Children {{annotation.child_id}}</p>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.7/fastclick.min.js"></script>
+        <script src="https://code.angularjs.org/1.2.19/angular.min.js"></script>
+        <script src="http:///ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-touch.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
+        <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/services.js"></script>
+        <script src="js/app.js"></script>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/custom.css">
+        <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"><h2> Annotation Applikation</h2></div>
+        </nav>
+
+        <div ng-controller="MainCtrl">
+
+            <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
+            <!--enter annotation -->
+            <p></p>
+            <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Annotation</button>
+            <div collapse="!isCollapsed">
+                <div class="well well-lg">
+                    <!--form ng-submit="submit()" ng-controller="FormController"-->
+                        <form ng-submit="submit()">
+                        <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
+                        <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
+                        <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                    </form>
+                </div>
+            </div>
 
 
-			
-		</div>
-	</body>
+
+            <p></p>     
+
+            <accordion close-others="oneAtATime">
+                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  {{post}}" ng-repeat=" post in posts['@graph']| filter:search:strict | orderBy:post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
+                    <p> {{post['cnt:#chars']}}</p>
+
+                    <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
+                    <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
+
+                    <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
+                </accordion-group>
+            </accordion>
+
+
+        </div>
+
+
+    </body>
 </html>

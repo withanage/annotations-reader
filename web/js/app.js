@@ -11,57 +11,40 @@ var readerApp = angular.module('readerApp',
         ['ui.bootstrap',
             'ngTouch',
             'readerAppControllers',
-            'readerAppServices'
+            'readerAppServices',
+            'ngRoute'
         ]);
-
-
 /**
+ var count = 1;
+ readerApp.config(function($routeProvider){
  
- function readerCtrl($scope, $http) {
- var context = {
- "fcrepo": "http://fedora.info/definitions/v4/repository",
- "cnt": 'http://www.w3.org/2011/content',
- "rest": 'http://fedora.info/definitions/v4/rest-api',
- "ldp": "http://www.w3.org/ns/ldp",
- "dc": "http://purl.org/dc/elements/1.1/",
- "oa": "http://www.w3.org/ns/oa",
- "mixin": "http://www.jcp.org/jcr/mix/1.0",
- };
- 
- headers = {'Accept': 'application/ld + json'};
- url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
- $http.get(url).
- success(function(data, status, headers, config) {
- 
- jsonld.compact(data, context, function(err, compacted) {
- $scope.posts = compacted;
- console.log("data", $scope.posts);
- });
- }).
- error(function(data, status, headers, config) {
- console.log(url + " not exists");
- });
- 
- $scope.oneAtATime = true;
- 
- $scope.status = {
- isFirstOpen: true,
- isFirstDisabled: false
- };
+ $routeProvider
+ .when("/",{
+ template:"<h1>root {{count}}</h1>",
+ controller: function($scope){
+ $scope.count = count++;
  }
+ })
+ .when("/other",{
+ template:"<h1>other</h1>" 
+ });
+ });
  
- 
- 
- function Reader($scope, $http) {
- var folder = '../';
- //var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
- var uuid = 'fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/';
- var template = 'default';
- $http.get(folder + uuid + 'fcr:transform/' + template).
- success(function(data) {
- $scope.annotation = data;
+ readerApp.directive('xref',function($route, $location){
+ return {
+ link: function(scope, elm,attr){
+ elm.on('click',function(){
+ if ( $location.path() === attr.xref ) {
+ $route.reload();
+ } else {
+ scope.$apply(function(){
+ $location.path(attr.xref);
  });
  }
  
  
+ });
+ }
+ };
+ });
  **/
