@@ -89,3 +89,39 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
 
 
+readerAppControllers.controller('WordCtrl', function($scope, debounce) {
+
+    $scope.words = [];
+    $scope.sentence = '';
+
+    $scope.parseSentence = function() {
+        var words = $scope.sentence.split(/\s+/g);
+        var wordObjects = [];
+        for (var i = 0; i < words.length; i++) {
+            wordObjects.push({word: words[i]});
+        }
+        if ((words.length == 1) && (words[0] === '')) {      // do not render any inputs when the sentence has no words
+            $scope.words = [];
+        } else {
+            $scope.words = wordObjects;
+        }
+    };
+
+    $scope.parseSentenceDebounced = debounce($scope.parseSentence, 700, false);
+    $scope.buildSentance = function(w) {
+        var words = [];
+        for (var i = 0; i < $scope.words.length; i++) {
+            var word = $scope.words[i].word;
+            if (word.replace(/\s+/g, '') !== '') {
+                words.push(word);
+            }
+        }
+
+        $scope.sentence = words.join(' ');
+        $scope.parseSentenceDebounced();
+
+    }
+
+    $scope.parseSentence();
+
+});
