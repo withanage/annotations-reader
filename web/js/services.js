@@ -25,6 +25,7 @@ readerAppServices.factory('fetchfedora', function($q, $http) {
         "mixin": "http://www.jcp.org/jcr/mix/1.0",
         "oax": 'http://www.w3.org/ns/openannotation/extensions/',
     };
+   
 
     var jsonld_download = {
         fetch: function(url) {
@@ -32,17 +33,18 @@ readerAppServices.factory('fetchfedora', function($q, $http) {
             var config = {headers: {"Accept": "application/ld+json"}};
 
             $http.get(url, config).success(function(data) {
-
+                
+                
                 jsonld.compact(data, context, function(err, compacted) {
                     deferred.resolve(compacted);
-                    console.log(compacted);
+
                 });
             });
 
             return deferred.promise;
         }
     };
-    console.log(jsonld_download);
+    
     return jsonld_download;
 });
 

@@ -49,9 +49,10 @@ and open the template in the editor.
 
 
             <p></p>     
-
+           
+  
             <accordion close-others="oneAtATime">
-                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  {{post}}" ng-repeat=" post in posts['@graph']| filter:search:strict | orderBy:post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
+                <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}} {{post['@id']}}{{post['fcrepo:#created']}}" ng-repeat=" post in posts| filter:search:strict | orderBy:-post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
                     <p> {{post['cnt:#chars']}}</p>
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#createdBy']}} </button>
@@ -64,6 +65,8 @@ and open the template in the editor.
 
         </div>
 
+        
+     
 
     </body>
 </html>

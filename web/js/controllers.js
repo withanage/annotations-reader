@@ -14,11 +14,25 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         isFirstDisabled: false
     };
 
+
+
     url = '../fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/';
     fetchfedora.fetch(url).then(function(data) {
-        $scope.posts = data;
-        //$scope.predicate = '-@id';
-        //console.log(data);
+        //cut the main element
+        $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
+        //
+        $scope.posts.sort(function(a, b) {
+            if (a['fcrepo:#created'] < b['fcrepo:#created'])
+                return 1;
+            if (a['fcrepo:#created'] > b['fcrepo:#created'])
+                return -1;
+          
+            return 0;
+        });
+        console.log("after", $scope.posts);
+        //
+        $scope.posts = $scope.posts.sort();
+
     });
 
 
@@ -67,7 +81,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
         fetchfedora.fetch(url).then(function(data) {
             $scope.posts = "";
-            console.log("debug",$scope.posts);
+            console.log("debug", $scope.posts);
         });
         $route.reload();
         $window.location.reload();
