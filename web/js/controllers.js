@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location) {
+readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location,generateUUID) {
     $scope.oneAtATime = true;
 
     $scope.status = {
@@ -16,13 +16,14 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
 
 
-    var prefix = '/fedora/rest/';
-    var collection = 'de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001';
-    var url = $location.$$host +prefix + collection;
-    var child_url = $location.$$host + '/' + collection + '/' + '6';
+    var prefix = 'fedora/rest';
+    var collection = $location.$$path.split('=')[1];
+    var url = $location.$$protocol+"://"+ $location.$$host+':'+$location.$$port+'/'+prefix +'/'+ collection;
+    var new_id = generateUUID;
+    var child_url = url + '/' + new_id;
     console.log(child_url);
     //console.log ($location);
-    console.log ($route);
+    console.log ($location);
     fetchfedora.fetch(url).then(function(data) {
         //cut the main element
         $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
