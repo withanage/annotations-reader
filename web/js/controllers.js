@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location,generateUUID) {
+readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location, generateUUID) {
     $scope.oneAtATime = true;
 
     $scope.status = {
@@ -18,12 +18,17 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
     var prefix = 'fedora/rest';
     var collection = $location.$$path.split('=')[1];
-    var url = $location.$$protocol+"://"+ $location.$$host+':'+$location.$$port+'/'+prefix +'/'+ collection;
-    var new_id = generateUUID;
+    //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/image=de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001
+    var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '/' + collection;
+    var new_id = Math.floor(Math.random() * 1000000000000000000000);
     var child_url = url + '/' + new_id;
     console.log(child_url);
     //console.log ($location);
-    console.log ($location);
+    console.log($location);
+
+
+
+
     fetchfedora.fetch(url).then(function(data) {
         //cut the main element
         $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
@@ -92,8 +97,10 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
             $scope.posts = "";
             console.log("debug", $scope.posts);
         });
+
         $route.reload();
         $window.location.reload();
+        //$scope.$apply( $location.path( url ) );
 
     };
 
