@@ -58,6 +58,17 @@ and open the template in the editor.
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
+                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Comment</button>
+            <div collapse="!isCollapsed">
+                <div class="well well-lg">
+                    <form ng-submit="submit()">
+                        <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
+                        <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
+                        <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                    </form>
+                </div>
+            </div>
+
                 </accordion-group>
             </accordion>
 
