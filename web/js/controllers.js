@@ -17,7 +17,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
     var prefix = 'fedora/rest';
     var collection = $location.$$path;
-    //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001
+    //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/
     var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '' + collection;
     //var new_id = Math.floor(Math.random() * 1000000000000000000000);
 
@@ -45,13 +45,12 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
     });
 
 
-    
-    
+
+
     //form
     $scope.submit = function() {
         $scope.title = this.title;
         $scope.text = this.text;
-
         $scope.postdata = [{
                 "@id": this.childurl,
                 "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
@@ -89,12 +88,10 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
             "ERR", console.log(err)
         });
 
-        /**
-         fetchfedora.fetch(url).then(function(data) {
-         $scope.posts = "";
-         console.log("debug", $scope.posts);
-         });
-         **/
+
+        fetchfedora.fetch(url).then(function(data) {
+        });
+
         $route.reload();
         $window.location.reload();
         //$scope.$apply( $location.path( url ) );

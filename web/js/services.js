@@ -23,7 +23,7 @@ readerAppServices.factory('generateUUID', function() {
     return uuid;
 });
 
-readerAppServices.factory('fetchfedora', function($q, $http) {
+readerAppServices.factory('fetchfedora', function($q, $http, $location) {
 
 
     var context = {
@@ -41,10 +41,25 @@ readerAppServices.factory('fetchfedora', function($q, $http) {
             var deferred = $q.defer();
             var config = {headers: {"Accept": "application/ld+json"}};
             $http.get(url, config).success(function(data) {
-                //console.log("$data ", data);
                 jsonld.compact(data, context, function(err, compacted) {
                     deferred.resolve(compacted);
                 });
+            }).error(function(headers, status) {
+                if (status == 404) {
+                    console.log("OK", url);
+                    $http({
+                        method: 'PUT',
+                        url: url
+
+                    }).success(function(data) {
+                        console.log("OK", url);
+
+                    }).error(function(err) {
+                        "ERR", console.log(err)
+                    });
+                }
+
+
             });
             return deferred.promise;
         }
@@ -79,4 +94,35 @@ readerAppServices.factory('debounce', function($timeout, $q) {
 });
 
 
+
+readerAppServices.factory('requestRejector', ['$q', function($q) {
+        var requestRejector = {
+            request: function(config) {
+                return $q.reject('requestRejector');
+            }
+        };
+        return requestRejector;
+    }]);
+
+readerAppServices.factory('requestRecoverer', ['$q', function($q) {
+        var requestRecoverer = {
+            requestError: function(rejectReason) {
+                if (rejectReason === 'requestRejector') {
+                    // Recover the request
+                    return {
+                        transformRequest: [],
+                        transformResponse: [],
+                        method: 'GET',
+                        url: 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0007/',
+                        headers: {
+                            Accept: 'application/ld+json, text/plain, */*'
+                        }
+                    };
+                } else {
+                    return $q.reject(rejectReason);
+                }
+            }
+        };
+        return requestRecoverer;
+    }]);
 
