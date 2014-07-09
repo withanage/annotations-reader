@@ -1,7 +1,89 @@
 [ {
-  "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/6",
-  "@type" : [ "http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable" ],
-  
+  "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005",
+  "@type" : [ "http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable" ],
+  "http://fedora.info/definitions/v4/repository#created" : [ {
+    "@value" : "2014-07-09T13:50:09.662Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#createdBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasChild" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005/cde9b1e"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasParent" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModified" : [ {
+    "@value" : "2014-07-09T13:50:19.694Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModifiedBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#mixinTypes" : [ {
+    "@value" : "fedora:resource"
+  }, {
+    "@value" : "fedora:object"
+  } ],
+  "http://fedora.info/definitions/v4/repository#primaryType" : [ {
+    "@value" : "nt:folder"
+  } ],
+  "http://fedora.info/definitions/v4/repository#uuid" : [ {
+    "@value" : "bf12a340-2d64-47e1-99f3-a14c16e7c242"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#exportsAs" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005/fcr:export?format=jcr/xml"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#hasAccessRoles" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005/fcr:accessroles"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#writable" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#boolean",
+    "@value" : "true"
+  } ],
+  "http://www.w3.org/ns/ldp#contains" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005/cde9b1e"
+  } ],
+  "http://www.w3.org/ns/ldp#hasMemberRelation" : [ {
+    "@id" : "http://fedora.info/definitions/v4/repository#hasChild"
+  } ],
+  "http://www.w3.org/ns/ldp#membershipResource" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005"
+  } ]
+}, {
+  "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005/cde9b1e",
+  "@type" : [ "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable" ],
+  "http://fedora.info/definitions/v4/repository#created" : [ {
+    "@value" : "2014-07-09T13:50:19.694Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#createdBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasParent" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0005"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModified" : [ {
+    "@value" : "2014-07-09T13:50:45.321Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModifiedBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#mixinTypes" : [ {
+    "@value" : "oa:Annotation"
+  }, {
+    "@value" : "fedora:resource"
+  }, {
+    "@value" : "fedora:object"
+  } ],
+  "http://fedora.info/definitions/v4/repository#primaryType" : [ {
+    "@value" : "nt:folder"
+  } ],
+  "http://fedora.info/definitions/v4/repository#uuid" : [ {
+    "@value" : "2a711c69-20e2-440d-a9da-725fd02a9c1e"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#writable" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#boolean",
+    "@value" : "true"
+  } ],
   "http://purl.org/dc/elements/1.1/format" : [ {
     "@value" : "text/html"
   } ],
@@ -9,13 +91,12 @@
     "@value" : "de"
   } ],
   "http://purl.org/dc/elements/1.1/title" : [ {
-    "@value" : "Titel sechs "
+    "@value" : "first level"
   } ],
   "http://www.w3.org/2011/content#characterEncoding" : [ {
     "@value" : "utf-8"
   } ],
   "http://www.w3.org/2011/content#chars" : [ {
-    "@value" : "\n   \n        Weit hinten, hinter den Wortbergen, fern der Länder Vokalien und Konsonantien leben die Blindtexte. \n        Abgeschieden wohnen sie in Buchstabhausen an der Küste des Semantik, eines großen Sprachozeans.\n        Ein kleines Bächlein namens Duden fließt durch ihren Ort und versorgt sie mit den nötigen \n        Regelialien. Es ist ein paradiesmatisches Land, in dem einem gebratene Satzteile in den Mund fliegen.\n        Nicht einmal von der allmächtigen Interpunktion werden die Blindtexte beherrscht – ein geradezu unorthographisches Leben.\n        Eines Tages aber beschloß eine kleine Zeile Blindtext, ihr Name war Lorem Ipsum, hinaus zu gehen in die weite Grammatik.\n        Der große Oxmox riet ihr davon ab, da es dort wimmele von bösen Kommata, wilden Fragezeichen und hinterhältigen Semikoli, \n        doch das Blindtextchen ließ sich nicht beirren. Es packte seine sieben Versalien, schob sich sein Initial in den Gürtel und machte sich auf den Weg. \n        Als es die ersten Hügel des Kursivgebirges erklommen hatte, warf es einen letzten Blick zurück auf die Skyline seiner Heimatstadt Buchstabhausen, \n        die Headline von Alphabetdorf und die Subline seiner eigenen Straße, der Zeilengasse. Wehmütig lief ihm eine rhetorische Frage über die Wange, dann setzte es seinen Weg fort.\n        Unterwegs traf es eine Copy. Die Copy warnte das Blindtextchen, da, wo sie herkäme wäre sie \n           \n    "
+    "@value" : "test"
   } ]
-  
 } ]

@@ -14,7 +14,7 @@ var readerAppServices = angular.module('readerAppServices', []);
 
 readerAppServices.factory('generateUUID', function() {
     var d = new Date().getTime();
-    var uuid = 'xxxxxxxxxxxxxx4xxxxyxxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var uuid = 'xxxxxxx'.replace(/[xy]/g, function(c) {
         //var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (d + Math.random() * 16) % 16 | 0;
         d = Math.floor(d / 16);
@@ -35,13 +35,16 @@ readerAppServices.factory('fetchfedora', function($q, $http, $location) {
         "oa": "http://www.w3.org/ns/oa",
         "mixin": "http://www.jcp.org/jcr/mix/1.0",
         "oax": 'http://www.w3.org/ns/openannotation/extensions/',
+        
     };
     var jsonld_download = {
         fetch: function(url) {
             var deferred = $q.defer();
             var config = {headers: {"Accept": "application/ld+json"}};
             $http.get(url, config).success(function(data) {
+                //deferred.resolve(data);
                 jsonld.compact(data, context, function(err, compacted) {
+                   
                     deferred.resolve(compacted);
                 });
             }).error(function(headers, status) {
@@ -61,6 +64,7 @@ readerAppServices.factory('fetchfedora', function($q, $http, $location) {
 
 
             });
+             //console.info(deferred.promise);
             return deferred.promise;
         }
     };
