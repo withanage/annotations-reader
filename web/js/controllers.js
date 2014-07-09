@@ -17,34 +17,36 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
 
     var prefix = 'fedora/rest';
-    var collection = $location.$$path.split('=')[1];
+    var collection = $location.$$path;
     //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/image=de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001
     var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '/' + collection;
-    var new_id = Math.floor(Math.random() * 1000000000000000000000);
-    var child_url = url + '/' + new_id;
-    console.log(child_url);
-    //console.log ($location);
-    console.log($location);
+    //var new_id = Math.floor(Math.random() * 1000000000000000000000);
+    console.log("location", $location);
 
 
-
+    console.log("url", url);
 
     fetchfedora.fetch(url).then(function(data) {
         //cut the main element
-        $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-        sort_text = 'fcrepo:#created';
-        $scope.posts.sort(function(a, b) {
-            if (a[sort_text] < b[sort_text])
-                return 1;
-            if (a[sort_text] > b[sort_text])
-                return -1;
+        $scope.posts = data;
+        if (data['@graph'] == true) {
+            $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
+            sort_text = 'fcrepo:#created';
+            $scope.posts.sort(function(a, b) {
+                if (a[sort_text] < b[sort_text])
+                    return 1;
+                if (a[sort_text] > b[sort_text])
+                    return -1;
 
-            return 0;
-        });
-        //console.log("after", $scope.posts);
-        console.log("location", $location);
-        //
-        $scope.posts = $scope.posts.sort();
+                return 0;
+            });
+            //console.log("after", $scope.posts);
+
+            $scope.child_url = url + '/' + $scope.posts.length + 1;
+            console.log("location", $location);
+            console.log("$scope.child_url", $scope.child_url);
+            $scope.posts = $scope.posts.sort();
+        }
 
     });
 
@@ -55,8 +57,8 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         $scope.title = this.title;
         $scope.text = this.text;
 
-        $scope.data = [{
-                "@id": child_url,
+        $scope.postdata = [{
+                "@id": $scope.child_url,
                 "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
                 "http://purl.org/dc/elements/1.1/format": [{
                         "@value": "text/html"
@@ -79,28 +81,29 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
         $http({
             method: 'PUT',
-            url: child_url,
-            data: $scope.data,
+            url: $scope.child_url,
+            data: $scope.postdata,
             headers: {
                 'Content-Type': 'application/ld+json'
 
             }
         }).success(function(data) {
-            console.log("OK", $scope.data)
+            console.log("OK", $scope.postdata)
 
         }).error(function(err) {
             "ERR", console.log(err)
         });
 
-
-        fetchfedora.fetch(url).then(function(data) {
-            $scope.posts = "";
-            console.log("debug", $scope.posts);
-        });
-
-        $route.reload();
-        $window.location.reload();
-        //$scope.$apply( $location.path( url ) );
+        /**
+         fetchfedora.fetch(url).then(function(data) {
+         $scope.posts = "";
+         console.log("debug", $scope.posts);
+         });
+         
+         $route.reload();
+         $window.location.reload();
+         //$scope.$apply( $location.path( url ) );
+         **/
 
     };
 
