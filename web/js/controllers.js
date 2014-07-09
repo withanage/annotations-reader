@@ -8,13 +8,10 @@
 var readerAppControllers = angular.module('readerAppControllers', []);
 readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location) {
     $scope.oneAtATime = true;
-
     $scope.status = {
         isFirstOpen: true,
         isFirstDisabled: false
     };
-
-
     var prefix = 'fedora/rest';
     var collection = $location.$$path;
     //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/
@@ -24,7 +21,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
     console.log("url", url);
     console.log("location", $location);
     fetchfedora.fetch(url).then(function(data) {
-        //cut the main element
+//cut the main element
         console.log("$data graph ", data['@graph'] != null);
         if (data['@graph'] != null) {
             $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
@@ -34,25 +31,20 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
                     return 1;
                 if (a[sort_text] > b[sort_text])
                     return -1;
-
                 return 0;
             })
             $scope.posts = $scope.posts.sort();
             $scope.childurl = url + '/' + ($scope.posts != null ? $scope.posts.length + 1 : 1);
-
         }
 
     });
-
-
-
-
     //form
     $scope.submit = function() {
         $scope.title = this.title;
         $scope.text = this.text;
+        $scope.childurl = url +''+ Math.floor(Math.random() * 1000000000000000000000);
         $scope.postdata = [{
-                "@id": this.childurl,
+                "@id": $scope.childurl,
                 "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
                 "http://purl.org/dc/elements/1.1/format": [{
                         "@value": "text/html"
@@ -71,11 +63,9 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
                     }]
 
             }];
-
-
         $http({
             method: 'PUT',
-            url: this.childurl,
+            url: $scope.childurl,
             data: $scope.postdata,
             headers: {
                 'Content-Type': 'application/ld+json'
@@ -89,8 +79,10 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         });
 
 
-        fetchfedora.fetch(url).then(function(data) {
-        });
+        /**
+         fetchfedora.fetch(url).then(function(data) {
+         });
+         **/
 
         $route.reload();
         $window.location.reload();

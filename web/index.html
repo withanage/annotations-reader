@@ -47,7 +47,7 @@ and open the template in the editor.
 
 
 
-            
+
             <accordion close-others="oneAtATime">
                 <accordion-group heading="  [{{$index + 1}}] {{post['dc:title']}}  " ng-repeat=" post in posts| filter:search:strict | orderBy:-post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
                     <p> {{post['cnt:#chars']}}</p>
@@ -56,16 +56,16 @@ and open the template in the editor.
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
-                     <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Comment</button>
-            <div collapse="!isCollapsed">
-                <div class="well well-lg">
-                    <form ng-submit="submit(childurl)">
-                        <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
-                        <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
-                        <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
-                    </form>
-                </div>
-            </div>
+                    <button class="btn btn-default" ng-click="cisCollapsed = !cisCollapsed">Comment</button>
+                    <div collapse="!cisCollapsed">
+                        <div class="well well-lg">
+                            <form ng-submit="submit(childurl)">
+                                <input  placeholder="Titel" class="form-control" type="text" ng-model="ctitle" name="title" /><p></p>
+                                <textarea  class="form-control" placeholder="Annotation" ng-model="ctext" name="text"></textarea>
+                                <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                            </form>
+                        </div>
+                    </div>
 
                 </accordion-group>
             </accordion>
