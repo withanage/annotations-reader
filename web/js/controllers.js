@@ -18,18 +18,16 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
     var prefix = 'fedora/rest';
     var collection = $location.$$path;
-    //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/image=de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001
-    var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '/' + collection;
+    //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001
+    var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '' + collection;
     //var new_id = Math.floor(Math.random() * 1000000000000000000000);
-    console.log("location", $location);
-
 
     console.log("url", url);
-
+    console.log("location", $location);
     fetchfedora.fetch(url).then(function(data) {
         //cut the main element
-        $scope.posts = data;
-        if (data['@graph'] == true) {
+        console.log("$data graph ", data['@graph']==null);
+        if (data['@graph'] != null) {
             $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
             sort_text = 'fcrepo:#created';
             $scope.posts.sort(function(a, b) {
@@ -42,16 +40,18 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
             });
             //console.log("after", $scope.posts);
 
-            $scope.child_url = url + '/' + $scope.posts.length + 1;
-            console.log("location", $location);
-            console.log("$scope.child_url", $scope.child_url);
+
+
             $scope.posts = $scope.posts.sort();
         }
 
     });
 
+    $scope.child_url = url + '/' + ($scope.posts == true ? $scope.posts.length + 1 : 1);
 
 
+    console.log("$scope.child_url", $scope.child_url);
+    console.log("$scope.posts ", $scope.posts);
     //form
     $scope.submit = function() {
         $scope.title = this.title;

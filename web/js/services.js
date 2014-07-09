@@ -41,8 +41,7 @@ readerAppServices.factory('fetchfedora', function($q, $http) {
             var deferred = $q.defer();
             var config = {headers: {"Accept": "application/ld+json"}};
             $http.get(url, config).success(function(data) {
-
-
+                //console.log("$data ", data);
                 jsonld.compact(data, context, function(err, compacted) {
                     deferred.resolve(compacted);
                 });
