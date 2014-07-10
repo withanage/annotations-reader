@@ -153,8 +153,8 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
     };
 
 
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
+// $modalInstance represents a modal window (instance) dependency.
+
 
     var ModalInstanceCtrl = function($scope, $modalInstance, items) {
 
