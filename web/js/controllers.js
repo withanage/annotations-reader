@@ -54,7 +54,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
             $scope.ctitle = this.ctitle;
             $scope.ctext = this.ctext;
         }
-
+        console.log($scope.childurl);
         $scope.postdata = [{
                 "@id": $scope.childurl,
                 "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
@@ -91,22 +91,16 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         });
 
 
-        /**
-         fetchfedora.fetch(url).then(function(data) {
-         });
-         **/
+
+        fetchfedora.fetch(url).then(function(data) {
+        });
 
         $route.reload();
         $window.location.reload();
-        //$scope.$apply( $location.path( url ) );
+        //$scope.$apply( $location.path(url) );
 
 
     };
-
-
-
-
-
 
 
 
@@ -190,7 +184,7 @@ readerAppControllers.controller('WordCtrl', function($scope, debounce) {
         for (var i = 0; i < words.length; i++) {
             wordObjects.push({word: words[i]});
         }
-        if ((words.length == 1) && (words[0] === '')) {      // do not render any inputs when the sentence has no words
+        if ((words.length == 1) && (words[0] === '')) {      //
             $scope.words = [];
         } else {
             $scope.words = wordObjects;

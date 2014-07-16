@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?><sv:node xmlns:premis="http://www.loc.gov/premis/rdf/v1#" xmlns:image="http://www.modeshape.org/images/1.0" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:test="info:fedora/test/" xmlns:fedorarelsext="http://fedora.info/definitions/v4/rels-ext#" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:oax="http://www.w3.org/ns/openannotation/extensions/" xmlns:cnt="http://www.w3.org/2011/content#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mode="http://www.modeshape.org/1.0" xmlns:oa="http://www.w3.org/ns/oa#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="http://fedora.info/definitions/v4/rest-api#" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fedoraconfig="http://fedora.info/definitions/v4/config#" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:authz="http://fedora.info/definitions/v4/authorization#" xmlns:dc="http://purl.org/dc/elements/1.1/" sv:name="0002">
+    <sv:property sv:name="jcr:primaryType" sv:type="Name">
+        <sv:value>nt:folder</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+        <sv:value>fedora:resource</sv:value>
+        <sv:value>fedora:object</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:uuid" sv:type="String">
+        <sv:value>11974f24-c6de-4f69-8cbb-98be99fab229</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+        <sv:value>bypassAdmin</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:createdBy" sv:type="String">
+        <sv:value>bypassAdmin</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:created" sv:type="Date">
+        <sv:value>2014-07-10T13:26:14.677+02:00</sv:value>
+    </sv:property>
+    <sv:property sv:name="jcr:lastModified" sv:type="Date">
+        <sv:value>2014-07-10T13:37:56.390+02:00</sv:value>
+    </sv:property>
+    <sv:node sv:name="e753705">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>a65f61e3-47d7-4b0b-b264-806db06fedf0</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>SA</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>AS</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:26:21.486+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:26:21.478+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="436248332">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>3d8ced34-3555-4f37-a100-a43ce2a6e7bc</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>asd</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>asd</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:29:16.838+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:29:16.835+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="1ca374b6">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>def39932-fb35-4a8d-a1ed-4d1e35a55077</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>tzutuuztuztuztuz</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>Rotating using transform-origin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:32:05.789+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:32:05.782+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="1d368f73">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>da3a8140-1a0a-4c22-9ad4-293db192e456</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>tz</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>te</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:32:21.533+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:32:21.530+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="12f7ca3d">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>ac31d28e-cff2-4822-a02d-91dc909ae0e9</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>asdsa</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>sada</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:33:56.345+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:33:56.341+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="13681c93">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>0fe8a570-2d5d-46b7-bd4f-fa2fdcfcb4d1</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>ASsS</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>SAsAS</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:34:14.553+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:34:14.549+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="142e3cec">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>9e86d615-466d-45cc-be83-e9accc959c2e</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>a</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>a</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:34:19.898+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:34:19.888+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="1c9a73bb">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>d0bf3a44-30ce-4aa9-9609-c7b98e660bad</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="URI" sv:multiple="true">
+            <sv:value>http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/.well-known/genid/f9babe45-72bf-4a19-808d-3c0cc1148cf3</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>as</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:34:23.669+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars_ref" sv:type="WeakReference" sv:multiple="true">
+            <sv:value>867a93fc-14cf-4e88-aaf2-dc1702de2326</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:34:23.619+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="124f40e2">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>eb68e67f-81ca-45b7-975c-336ddc69f05c</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>ASsA</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/.well-known/genid/26ca350b-3e63-4782-a56a-80a8dca3b802</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:34:27.277+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:34:27.274+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="1f0b9923">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>8d2d325c-83df-4fe1-8156-56d1ea891b9e</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>D</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>D</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:37:43.303+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:37:43.300+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+    <sv:node sv:name="19123672">
+        <sv:property sv:name="jcr:primaryType" sv:type="Name">
+            <sv:value>nt:folder</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:mixinTypes" sv:type="Name" sv:multiple="true">
+            <sv:value>oa:Annotation</sv:value>
+            <sv:value>fedora:resource</sv:value>
+            <sv:value>fedora:object</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:uuid" sv:type="String">
+            <sv:value>8d4278ca-02d4-4036-b8e9-77e17d923d05</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModifiedBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:format" sv:type="String" sv:multiple="true">
+            <sv:value>text/html</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:chars" sv:type="String" sv:multiple="true">
+            <sv:value>E</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:title" sv:type="String" sv:multiple="true">
+            <sv:value>http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/.well-known/genid/1779a7f0-7a32-4694-ab1e-fa4f6fe766f8</sv:value>
+        </sv:property>
+        <sv:property sv:name="dc:language" sv:type="String" sv:multiple="true">
+            <sv:value>de</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:createdBy" sv:type="String">
+            <sv:value>bypassAdmin</sv:value>
+        </sv:property>
+        <sv:property sv:name="cnt:characterEncoding" sv:type="String" sv:multiple="true">
+            <sv:value>utf-8</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:created" sv:type="Date">
+            <sv:value>2014-07-10T13:37:56.390+02:00</sv:value>
+        </sv:property>
+        <sv:property sv:name="jcr:lastModified" sv:type="Date">
+            <sv:value>2014-07-10T13:37:56.385+02:00</sv:value>
+        </sv:property>
+    </sv:node>
+</sv:node>

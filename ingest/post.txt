@@ -1,4 +1,5 @@
 @prefix fcrepo : <http://fedora.info/definitions/v4/repository#>
+@prefix  cnt : <http://www.w3.org/2011/content#char>
 
 dc_title = dc:title :: xsd:string;
 dc_description =  dc:description :: xsd:string;
@@ -11,3 +12,4 @@ fcrepo_hasChild = fcrepo:hasChild :: xsd:string;
 fcrepo_created  =  fcrepo:created :: xsd:string;
 fcrepo_createdBy =  fcrepo:createdBy :: xsd:string;
 fcrepo_lastModified  =  fcrepo:lastModified   :: xsd:string;
+

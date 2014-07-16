@@ -20,7 +20,7 @@ readerAppServices.factory('generateUUID', function() {
         d = Math.floor(d / 16);
         return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
     });
-    return uuid;
+    return "1"+uuid;
 });
 
 readerAppServices.factory('fetchfedora', function($q, $http, $location) {
