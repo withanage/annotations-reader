@@ -29,7 +29,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
             
             //children
             $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-            $scope.parent = data['@graph'].splice(0, 1);
+            $scope.parent = data['@graph'];
             //$scope.parent = data['@graph'];
             sort_text = 'fcrepo:#lastModified';
             $scope.posts.sort(function(a, b) {
