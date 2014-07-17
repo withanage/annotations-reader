@@ -56,6 +56,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
                     mychildren.push(child);
                 })
                 var tuple = {'title': value['dc:title'],
+                    'id':value['fcrepo:#uuid'],
                     'text': value['dc:description'],
                     'date': value['fcrepo:#created'],
                     'name': value['fcrepo:#createdBy'],
