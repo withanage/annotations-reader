@@ -26,8 +26,11 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
         console.log("$data graph ", data['@graph'] != null);
         console.log("data", data);
         if (data['@graph'] != null) {
+            
+            //children
             $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-            $scope.parent = data['@graph'];
+            $scope.parent = data['@graph'].splice(0, 1);
+            //$scope.parent = data['@graph'];
             sort_text = 'fcrepo:#lastModified';
             $scope.posts.sort(function(a, b) {
                 if (a[sort_text] < b[sort_text])
@@ -37,7 +40,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
                 return 0;
             })
             $scope.posts = $scope.posts.sort();
-            $scope.childurl = url + '/' + ($scope.posts != null ? $scope.posts.length + 1 : 1);
+            
         }
 
     });

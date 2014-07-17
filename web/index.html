@@ -30,7 +30,7 @@ and open the template in the editor.
         </nav>
 
         <div ng-controller="MainCtrl">
-            {{posts}}
+           
 
             <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
             <!--enter annotation -->
@@ -54,10 +54,11 @@ and open the template in the editor.
                     <accordion-heading> 
 
                         <div class="row">
-                            <div class="col-md-10">[{{$index + 1}}] {{post['dc:title']}}  {{post['fcrepo:#hasChild']}} </div>
+                            <div class="col-md-10">[{{$index + 1}}] {{post['dc:title']}}  {{parent['fcrepo:#hasChild']}} </div>
                             
                             <div class="col-md-2"><p class="text-right"><small>{{post['fcrepo:#lastModified'].split('T')[0]}}  {{post['fcrepo:#lastModified'].split('T')[1].split('.')[0]}}</small></p></div>
                         </div>
+                        <div class="row">{{post}}</div>
 
                     </accordion-heading>
                     <p> {{post['dc:description']}}</p>
