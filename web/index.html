@@ -50,29 +50,28 @@ and open the template in the editor.
 
 
             <accordion close-others="oneAtATime">
-                <accordion-group  ng-repeat=" post in posts| filter:search:strict | orderBy:-post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
+                <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy:-post" ng-click='getdata(post["@id"], post["oa:#hasBody"])' is-open="true" >
                     <accordion-heading> 
 
                         <div class="row">
-                            <div class="col-md-10">[{{$index + 1}}] {{post['dc:title']}}  {{parent['fcrepo:#hasChild']}} </div>
+                            <div class="col-md-9">[{{$index + 1}}] {{comment.title}}  </div>
                             
-                            <div class="col-md-2"><p class="text-right"><small>{{post['fcrepo:#lastModified'].split('T')[0]}}  {{post['fcrepo:#lastModified'].split('T')[1].split('.')[0]}}</small></p></div>
+                            <div class="col-md-3"><p class="text-right"><small>{{comment.date.split('T')[0]}}  {{comment.date.split('T')[1].split('.')[0]}}</small></p></div>
+                            <div class="col-md-0"><span class="badge pull-right"> {{child[0]["ldp:#contains"].length}}</span></div>
+                            
                         </div>
-                        <div class="row">{{post}}</div>
+                       
 
                     </accordion-heading>
-                    <p> {{post['dc:description']}}</p>
-
-                    <button class="btn btn-default btn-sm">{{post['fcrepo:#lastModified']}} </button>
-                    <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
+                    <p> {{comment.text}}</p>
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
                     <button class="btn btn-default" ng-click="cisCollapsed = !cisCollapsed">Comment</button>
                     <div collapse="!cisCollapsed">
                         <div class="well well-lg">
                             <form ng-submit="submit(post['@id'])">
-                                <input  placeholder="Titel" class="form-control" type="text" ng-model="ctitle" name="title" /><p></p>
-                                <textarea  class="form-control" placeholder="Annotation" ng-model="ctext" name="text"></textarea>
+                                <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
+                                <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
                                 <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
                             </form>
                         </div>

@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal, $log, $http, $window, $route, $location, generateUUID) {
+readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $modal, $log, $http, $window, $route, $location, generateUUID) {
     $scope.oneAtATime = true;
     $scope.status = {
         isFirstOpen: true,
@@ -20,28 +20,66 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
     console.log("url", url);
     console.log("location", $location);
-
-    fetchfedora.fetch(url).then(function(data) {
-//cut the main element
-        console.log("$data graph ", data['@graph'] != null);
-        console.log("data", data);
+    /**
+     fedoraService.fetch(url).then(function(data) {
+     //cut the main element
+     console.log("$data graph ", data['@graph'] != null);
+     console.log("data", data);
+     if (data['@graph'] != null) {
+     
+     //children
+     $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
+     $scope.parent = data['@graph'];
+     sort_text = 'fcrepo:#lastModified';
+     $scope.posts.sort(function(a, b) {
+     if (a[sort_text] < b[sort_text])
+     return 1;
+     if (a[sort_text] > b[sort_text])
+     return -1;
+     return 0;
+     })
+     $scope.posts = $scope.posts.sort();
+     
+     }
+     **/
+    $scope.comments = [];
+    fedoraService.fetch(url).then(function(data) {
         if (data['@graph'] != null) {
-            
-            //children
-            $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-            $scope.parent = data['@graph'];
-            //$scope.parent = data['@graph'];
-            sort_text = 'fcrepo:#lastModified';
-            $scope.posts.sort(function(a, b) {
-                if (a[sort_text] < b[sort_text])
-                    return 1;
-                if (a[sort_text] > b[sort_text])
-                    return -1;
-                return 0;
-            })
-            $scope.posts = $scope.posts.sort();
-            
+            var annos = data['@graph'].splice(1, data['@graph'].length - 1);
+            angular.forEach(annos, function(value) {
+                //console.log(value['http://purl.org/dc/elements/1.1/title']);
+                //console.log(value);
+                var children = (value['ldp:#contains'] ? value['ldp:#contains'] : []);
+                console.log(value['dc:title']);
+                var mychildren = [];
+                angular.forEach(children, function(child) {
+                    mychildren.push(child);
+                })
+                var tuple = {'title': value['dc:title'],
+                    'text': value['dc:description'],
+                    'date': value['fcrepo:#created'],
+                    'name': value['fcrepo:#createdBy'],
+                    'profileUrl': 'http://dummyimage.com/80x40&text=' + value['fcrepo:#createdBy'],
+                    'child_count': children.length,
+                    'children': mychildren
+
+                }
+                $scope.comments.push(tuple);
+            });
         }
+        //console.log($scope.comments);
+        sort_text = 'date';
+        $scope.comments.sort(function(a, b) {
+            if (a[sort_text] < b[sort_text])
+                return 1;
+            if (a[sort_text] > b[sort_text])
+                return -1;
+            return 0;
+        })
+        $scope.comments = $scope.comments.sort();
+        //console.log($scope.comments);
+
+
 
     });
     //form
@@ -49,13 +87,13 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
         if (id == null) {
             $scope.childurl = url + generateUUID;//''+ Math.floor(Math.random() * 10000000000000000);
-            $scope.ctitle = this.title;
-            $scope.ctext = this.text;
+            $scope.title = this.title;
+            $scope.text = this.text;
         }
         else {
             $scope.childurl = id + '/' + generateUUID;
-            $scope.ctitle = this.ctitle;
-            $scope.ctext = this.ctext;
+            $scope.title = this.title;
+            $scope.text = this.text;
         }
         console.log($scope.childurl);
         $scope.postdata = [{
@@ -68,13 +106,13 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
                         "@value": "de"
                     }],
                 "http://purl.org/dc/elements/1.1/title": [{
-                        "@value": $scope.ctitle
+                        "@value": $scope.title
                     }],
                 "http://www.w3.org/2011/content#characterEncoding": [{
                         "@value": "utf-8"
                     }],
                 "http://purl.org/dc/elements/1.1/description": [{
-                        "@value": $scope.ctext
+                        "@value": $scope.text
                     }]
 
             }];
@@ -95,11 +133,11 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
 
 
 
-        fetchfedora.fetch(url).then(function(data) {
+        fedoraService.fetch(url).then(function(data) {
         });
 
-        $route.reload();
-        $window.location.reload();
+        //$route.reload();
+        //$window.location.reload();
         //$scope.$apply( $location.path(url) );
 
 

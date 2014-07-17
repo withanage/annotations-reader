@@ -23,7 +23,12 @@ readerAppServices.factory('generateUUID', function() {
     return "1"+uuid;
 });
 
-readerAppServices.factory('fetchfedora', function($q, $http, $location) {
+
+
+
+
+
+readerAppServices.factory('fedoraService', function($q, $http) {
 
 
     var context = {
