@@ -70,7 +70,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fetchfedora, $modal
                 "http://www.w3.org/2011/content#characterEncoding": [{
                         "@value": "utf-8"
                     }],
-                "http://www.w3.org/2011/content#chars": [{
+                "http://purl.org/dc/elements/1.1/description": [{
                         "@value": $scope.ctext
                     }]
 

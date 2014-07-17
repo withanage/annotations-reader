@@ -30,6 +30,7 @@ and open the template in the editor.
         </nav>
 
         <div ng-controller="MainCtrl">
+            {{posts}}
 
             <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
             <!--enter annotation -->
@@ -58,10 +59,8 @@ and open the template in the editor.
                             <div class="col-md-2"><p class="text-right"><small>{{post['fcrepo:#lastModified'].split('T')[0]}}  {{post['fcrepo:#lastModified'].split('T')[1].split('.')[0]}}</small></p></div>
                         </div>
 
-
-
                     </accordion-heading>
-                    <p> {{post['cnt:#chars']}}</p>
+                    <p> {{post['dc:description']}}</p>
 
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#lastModified']}} </button>
                     <button class="btn btn-default btn-sm">{{post['fcrepo:#created']}}</button>
