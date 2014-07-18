@@ -18,30 +18,13 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
     var url = $location.$$protocol + "://" + $location.$$host + ':' + $location.$$port + '/' + prefix + '' + collection;
     //var new_id = Math.floor(Math.random() * 1000000000000000000000);
 
-    console.log("url", url);
-    console.log("location", $location);
-    /**
-     fedoraService.fetch(url).then(function(data) {
-     //cut the main element
-     console.log("$data graph ", data['@graph'] != null);
-     console.log("data", data);
-     if (data['@graph'] != null) {
-     
-     //children
-     $scope.posts = data['@graph'].splice(1, data['@graph'].length - 1);
-     $scope.parent = data['@graph'];
-     sort_text = 'fcrepo:#lastModified';
-     $scope.posts.sort(function(a, b) {
-     if (a[sort_text] < b[sort_text])
-     return 1;
-     if (a[sort_text] > b[sort_text])
-     return -1;
-     return 0;
-     })
-     $scope.posts = $scope.posts.sort();
-     
-     }
-     **/
+    //console.log("url", url);
+    //console.log("location", $location);
+    
+   
+    
+    
+    
     $scope.comments = [];
     fedoraService.fetch(url).then(function(data) {
         if (data['@graph'] != null) {
@@ -60,7 +43,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
                     'text': value['dc:description'],
                     'date': value['fcrepo:#created'],
                     'name': value['fcrepo:#createdBy'],
-                    'profileUrl': 'http://dummyimage.com/80x40&text=' + value['fcrepo:#createdBy'],
+                    'profileUrl': 'http://dummyimage.com/40x40&text=' + value['fcrepo:#createdBy'],
                     'child_count': children.length,
                     'children': mychildren
 
@@ -79,10 +62,19 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
         })
         $scope.comments = $scope.comments.sort();
         //console.log($scope.comments);
+        
+        $scope.add = function(data) {
+        var post = data.nodes.length + 1;
+        var newName = data.name + '-' + post;
+        data.nodes.push({name: newName,nodes: []});
+    };
+    $scope.tree = [{name: "Node", nodes: []}];
 
 
 
     });
+    
+    
     //form
     $scope.submit = function(id) {
 
