@@ -27,7 +27,6 @@ var readerApp = angular.module('readerApp', ['ngRoute']);
  **/
 // create the controller and inject Angular's $scope
 readerApp.controller('mainController', function($scope, fedoraService) {
-    // create a message to display in our view
     $scope.message = 'Everyone come and see how good I look!';
     var url = 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export';
     var x2js = new X2JS();
