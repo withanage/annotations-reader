@@ -1,6 +1,5 @@
 // create the module and name it readerApp
 var readerApp = angular.module('readerApp', ['ngRoute']);
-
 // configure our routes
 /**
  readerApp.config(function($routeProvider) {
@@ -30,14 +29,19 @@ readerApp.controller('mainController', function($scope, fedoraService) {
     $scope.message = 'Everyone come and see how good I look!';
     var url = 'http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export';
     var x2js = new X2JS();
+    $scope.comments = [];
+    var values =[];
     fedoraService.fetch(url).then(function(data) {
-        $scope.comments = x2js.xml_str2json(data.data);
-        //console.log($scope.comments);
+        $scope.comments = x2js.xml_str2json(data.data).node.node;
+        
+        console.log(JSON.stringify($scope.comments));
     });
-
-
-
     //
+    $scope.oneAtATime = true;
+    $scope.status = {
+        isFirstOpen: true,
+        isFirstDisabled: false
+    };
     $scope.vm = {};
     $scope.vm.chapter = {
         "Id": "N7313",
@@ -78,21 +82,16 @@ readerApp.controller('mainController', function($scope, fedoraService) {
 
         ]
     };
-
     //**
 
 
 });
-
 readerApp.controller('aboutController', function($scope) {
     $scope.message = 'Look! I am an about page.';
 });
-
 readerApp.controller('contactController', function($scope) {
     $scope.message = 'Contact us! JK. This is just a demo.';
 });
-
-
 readerApp.factory('fedoraService', function($http) {
     var fetch = function(url) {
         return $http({
@@ -101,7 +100,6 @@ readerApp.factory('fedoraService', function($http) {
         });
         //console.log('xhr called ' + url);
     };
-
     return {
         fetch: fetch
     };
