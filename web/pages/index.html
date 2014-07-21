@@ -13,37 +13,16 @@
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
         <script src="js/angular_reader.js"></script>
         <script src="https://x2js.googlecode.com/hg/xml2json.js" type="text/javascript"></script>
-        <script id="paragraphTmpl.html" type="text/ng-template">
-            <a class="anchor" ng-attr-id="data.Id"></a>
-            <h4 ng-bind="data.Title"></h4>
-            <div class="paragraph-text" ng-bind-html="data.Content"></div>
-            <!-- Want to loose the div in the repeat as well -->
-            <ng-include
-            ng-if="data.Paragraphs.length > 0" 
-            onload="data = paragraph" 
-            ng-repeat="paragraph in data.Paragraphs" 
-            src="'paragraphTmpl.html'"></div>
-        </script>
-
-        <!--script id="reader.html" type="text/ng-template">
-            <p>data.property</p>
-            <ng-include
-            ng-if="data.node.length > 0" 
-            onload="data = j" 
-            ng-repeat="j in data.node" 
-            src="'reader.html'"></div>            
-        </script-->
+       
    
     <script type="text/ng-template" id="tree-renderer.html">
  
  <ul>
+    <ul class="" ng-repeat="e in comment.property">
+        <!--li>{{e["_sv:name"]}}</li-->
+        <li>{{e.value["__text"]}}</li>
 
-   
-                    <ul class="" ng-repeat="e in comment.property">
-                    <!--li>{{e["_sv:name"]}}</li-->
-                    <li>{{e.value["__text"]}}</li>
-                                        
-                    </ul>
+    </ul>
  
    <li ng-repeat="comment in comment.node" ng-include="'tree-renderer.html'"></li>
    
