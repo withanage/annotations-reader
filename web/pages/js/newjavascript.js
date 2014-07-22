@@ -7,7 +7,7 @@ angular.module('APP', [])
                 scope: {
                     collection: '='
                 },
-                template: "<div class='panel panel-default'>  <div class='panel-heading'>Panel heading without title</div> <div class='panel-body'><member ng-repeat='member in collection' member='member'></member></div></div>"
+                template: "<div class='panel-body'><member ng-repeat='member in collection' member='member'></member></div>"
             };
         })
 
