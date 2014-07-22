@@ -23,96 +23,78 @@ and open the template in the editor.
         <script src="js/app.js"></script>
         <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/custom.css">
-        <script type="text/ng-template"  id="tree_item_renderer.html">
-            {{data.name}}
-            <form ng-submit="add(data)">
-                    <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
-                    <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
-                    <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
-                </form>
-
-            <ul>
-            <li ng-repeat="data in data.nodes" ng-include="'tree_item_renderer.html'"></li>
-            </ul>
-        </script>
-
-   
-<script type="text/ng-template"  id="annotations.html"> 
-            
-            </script>
 
 
-</head>
-<body>
-    
-     <!--ul ng-controller="MainCtrl">
-        <li ng-repeat="data in tree" ng-include="'tree_item_renderer.html'"></li>
-    </ul-->
-    
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid"><h2> Annotation Applikation</h2></div>
-    </nav>
 
-    <div ng-controller="MainCtrl">
+    </head>
+    <body>
 
 
-        <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
-        <!--enter annotation -->
-        <p></p>
-        <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Annotation</button>
-        <div collapse="!isCollapsed">
-            <div class="well well-lg">
-                <form ng-submit="submit()">
-                    <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
-                    <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
-                    <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
-                </form>
+
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid"><h2> Annotation Applikation</h2></div>
+        </nav>
+
+        <div ng-controller="MainCtrl">
+
+
+            <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
+            <!--enter annotation -->
+            <p></p>
+            <button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Annotation</button>
+            <div collapse="!isCollapsed">
+                <div class="well well-lg">
+                    <form ng-submit="submit()">
+                        <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
+                        <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
+                        <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                    </form>
+                </div>
             </div>
+
+
+
+
+            <accordion close-others="oneAtATime">
+                <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy:-post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
+                    <accordion-heading> 
+
+                        <div class="row">
+                            <div class="col-md-9">[{{$index + 1}}]<img ng-src="{{comment.profileUrl}}"> {{comment.title}} </div>
+
+                            <div class="col-md-3"><p class="text-right"><small>{{comment.date.split('T')[0]}}  {{comment.date.split('T')[1].split('.')[0]}}</small></p></div>
+                            <div class="col-md-0"><span class="badge pull-right"> {{child[0]["ldp:#contains"].length}}</span></div>
+
+                        </div>
+
+
+                    </accordion-heading>
+
+                    {{comment.text}}
+
+                    <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
+                    <br>
+                    <span class="label label-default" ng-click="cisCollapsed = !cisCollapsed">Annotation</span>
+
+
+                    <div collapse="!cisCollapsed">
+                        <div class="well well-lg">
+                            <form ng-submit="submit(post['@id'])">
+                                <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
+                                <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
+                                <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
+                            </form>
+                        </div>
+                    </div>
+
+                </accordion-group>
+            </accordion>
+
+
         </div>
 
 
 
 
-        <accordion close-others="oneAtATime">
-            <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy:-post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
-                <accordion-heading> 
-
-                    <div class="row">
-                        <div class="col-md-9">[{{$index + 1}}]<img ng-src="{{comment.profileUrl}}"> {{comment.title}} </div>
-
-                        <div class="col-md-3"><p class="text-right"><small>{{comment.date.split('T')[0]}}  {{comment.date.split('T')[1].split('.')[0]}}</small></p></div>
-                        <div class="col-md-0"><span class="badge pull-right"> {{child[0]["ldp:#contains"].length}}</span></div>
-
-                    </div>
-
-
-                </accordion-heading>
-
-                {{comment.text}}
-
-                <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
-                <br>
-                <span class="label label-default" ng-click="cisCollapsed = !cisCollapsed">Annotation</span>
-
-
-                <div collapse="!cisCollapsed">
-                    <div class="well well-lg">
-                        <form ng-submit="submit(post['@id'])">
-                            <input  placeholder="Titel" class="form-control" type="text" ng-model="title" name="title" /><p></p>
-                            <textarea  class="form-control" placeholder="Annotation" ng-model="text" name="text"></textarea>
-                            <input class="btn btn-default" type="submit" id="submit" value="Einfügen" />
-                        </form>
-                    </div>
-                </div>
-
-            </accordion-group>
-        </accordion>
-
-
-    </div>
-
-
-
-
-</body>
+    </body>
 </html>

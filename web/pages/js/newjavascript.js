@@ -18,7 +18,8 @@ angular.module('APP', [])
                 scope: {
                     member: '='
                 },
-                template: " <div class='media'> <a class='pull-left' href='#'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a><div class='media-body'>  <h4 class='media-heading'>{{member.property[5].value.__text}}</h4>{{member.property[11].value.__text}}</div></div>",
+                template: " <div class='media'> <a class='pull-left' href='#'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a><div class='media-body'> \n\
+ <h4 class='media-heading'>{{member.property[5].value.__text}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <small>{{member.property[3].value.__text}}</small>  <small>{{member.property[9].value.__text | fromNow }}</small></h4>{{member.property[11].value.__text}}</div></div>",
                 link: function(scope, element, attrs) {
                     if (angular.isArray(scope.member.node)) {
                         element.append("<collection collection='member.node'></collection>");
@@ -43,6 +44,13 @@ angular.module('APP', [])
         })
 
 
+        .filter('fromNow', function() {
+            return function(date) {
+                return moment(date).fromNow();
+            }
+        })
+
+
         .controller('IndexCtrl', function($scope, fedoraService) {
 
 
@@ -51,7 +59,7 @@ angular.module('APP', [])
             $scope.tasks = [];
             var values = [];
             fedoraService.fetch(url).then(function(data) {
-                $scope.tasks = x2js.xml_str2json(data.data);
+                $scope.tasks = x2js.xml_str2json(data.data).node.node;
 
                 console.log(JSON.stringify($scope.tasks));
             });
