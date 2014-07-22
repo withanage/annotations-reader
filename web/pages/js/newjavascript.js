@@ -7,7 +7,7 @@ angular.module('APP', [])
                 scope: {
                     collection: '='
                 },
-                template: "<div class='media'> <a class='pull-left' href='#'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a><member ng-repeat='member in collection' member='member'></member></div>"
+                template: "<div class='panel panel-default'>  <div class='panel-heading'>Panel heading without title</div> <div class='panel-body'><member ng-repeat='member in collection' member='member'></member></div></div>"
             };
         })
 
@@ -18,7 +18,7 @@ angular.module('APP', [])
                 scope: {
                     member: '='
                 },
-                template: " <div class='media-body'>  <h4 class='media-heading'>{{member.property[5].value.__text}}</h4>{{member.property[11].value.__text}}</div>",
+                template: " <div class='media'> <a class='pull-left' href='#'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a><div class='media-body'>  <h4 class='media-heading'>{{member.property[5].value.__text}}</h4>{{member.property[11].value.__text}}</div></div>",
                 link: function(scope, element, attrs) {
                     if (angular.isArray(scope.member.node)) {
                         element.append("<collection collection='member.node'></collection>");
