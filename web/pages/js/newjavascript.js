@@ -7,7 +7,7 @@ angular.module('APP', [])
                 scope: {
                     collection: '='
                 },
-                template: "<div class='panel-body'><member ng-repeat='member in collection' member='member'></member></div>"
+                template: "<div class='panel-body'><member ng-repeat='member in collection'  member='member' ></member></div>"
             };
         })
 
@@ -18,10 +18,18 @@ angular.module('APP', [])
                 scope: {
                     member: '='
                 },
-                template: " <div class='media'> <a class='pull-left' href='#'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a><div class='media-body'> \n\
- <h4 class='media-heading'>{{member[5].value.__text}}{{member.property[5].value.__text}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <small>{{member.property[3].value.__text}}</small>  <small>{{member.property[9].value.__text | fromNow }}</small></h4>\n\
-{{member[11].value.__text}}\n\
-{{member.property[11].value.__text}}</div></div>",
+                template: "\
+                    <div class='media'>\n\
+                        <a class='pull-left' href='#' ng-if='(member.length==12) || (member.property.length==12)'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a>\n\
+                        <div class='media-body' ng-if='(member.length==12) || (member.property.length==12)' > \n\
+                        <h4 class='media-heading'>{{member[5].value.__text}}{{member.property[5].value.__text}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \n\
+                            <small>{{member.property[3].value.__text}}</small>  \n\
+                            <small>{{member.property[9].value.__text | fromNow }}</small>\n\
+                        </h4>\n\
+                                {{member[11].value.__text}}\n\
+                                    {{member.property[11].value.__text}}\n\
+                        </div>\n\
+                    </div>",
                 link: function(scope, element, attrs) {
                     //if (angular.isArray(scope.member.node)) {
                         element.append("<collection collection='member.node'></collection>");
