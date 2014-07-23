@@ -14,7 +14,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, 
     };
     var prefix = 'fedora/rest';
     var collection = $location.$$path;
-    var server_port = 8080;//$location.$$port
+    var server_port = 8080;//or $location.$$port
     //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/
     var url = $location.$$protocol + "://" + $location.$$host + ':' + server_port + '/' + prefix + '' + collection;
     //var new_id = Math.floor(Math.random() * 1000000000000000000000);
@@ -38,7 +38,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, 
                 var temp = [];
                 $http.get(value['@id'] + '/fcr:export').success(function(data) {
                     var x2js = new X2JS();
-                    var d = x2js.xml_str2json(data);
+                    var d = x2js.xml_str2json(data).node;
                     //temp = [];
                     temp.pop();
                     temp.push(d);

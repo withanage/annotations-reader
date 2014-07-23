@@ -13,17 +13,20 @@ var readerApp = angular.module('readerApp',
             'readerAppControllers',
             'readerAppServices',
             'ngRoute'
-        ]);
+        ])
+
+       
+
 
 
 
 /**
-readerAppServices.config(['$httpProvider', function($httpProvider) {
-        $httpProvider.interceptors.push('requestRejector');
-        // Removing 'requestRecoverer' will result to failed request
-        $httpProvider.interceptors.push('requestRecoverer');
-    }]);
-**/
+ readerAppServices.config(['$httpProvider', function($httpProvider) {
+ $httpProvider.interceptors.push('requestRejector');
+ // Removing 'requestRecoverer' will result to failed request
+ $httpProvider.interceptors.push('requestRecoverer');
+ }]);
+ **/
 /**
  var count = 1;
  readerApp.config(function($routeProvider){
