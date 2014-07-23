@@ -12,6 +12,7 @@ var readerApp = angular.module('readerApp',
             'ngTouch',
             'readerAppControllers',
             'readerAppServices',
+            'readerAppFilters',
             'ngRoute'
         ])
 
