@@ -19,7 +19,7 @@ angular.module('APP', [])
                     member: '='
                 },
                 template: "\
-                    <div id='{{!(member.length==12&&member.property.length==12)}}' class='media'>\n\
+                    <div class='media'>\n\
                         <a class='pull-left' href='#' ng-if='(member.length==12) || (member.property.length==12)'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a>\n\
                         <div class='media-body' ng-if='(member.length==12) || (member.property.length==12)' > \n\
                         <h4 class='media-heading'>{{member[5].value.__text}}{{member.property[5].value.__text}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \n\
