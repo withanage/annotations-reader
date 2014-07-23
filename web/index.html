@@ -59,7 +59,7 @@ and open the template in the editor.
 
 
             <accordion close-others="oneAtATime">
-                <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy:-post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
+                <accordion-group  ng-repeat=" comment in comments | filter:search:strict | orderBy: - post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
                     <accordion-heading> 
 
                         <div class="row">
@@ -72,9 +72,19 @@ and open the template in the editor.
 
 
                     </accordion-heading>
-                    {{comment.text}}
-                    <div class='panel-body'  ng-repeat='member in comment.annotations'><p>{{member}}</p></div>
-                    
+                    <script type="text/ng-template" id="categoryTree">
+                        {{anno.property[5].value.__text}}{{anno[5].value.__text}}
+                        ______________
+                         {{anno[11].value.__text}} {{anno.property[11].value.__text}}
+                        <ul ng-if="anno.node">
+                        <li ng-repeat="anno in anno.node" ng-include="'categoryTree'">           
+                        </li>
+                        </ul>
+                    </script>   
+                    <ul>
+                        <li ng-repeat="anno in comment.annotations" ng-include="'categoryTree'"></li>
+                    </ul>    
+
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
                     <br>
