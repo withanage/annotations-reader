@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, fedoraServiceXML, $modal, $log, $http, $window, $route, $location, generateUUID) {
+readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, fedoraServiceXML, $modal, $log, $http, $window, $route, $location, generateUUID, $q) {
     $scope.oneAtATime = true;
     $scope.status = {
         isFirstOpen: true,
@@ -25,43 +25,47 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, 
 
 
 
-    $scope.tasks = [];
+
     $scope.comments = [];
-    $scope.child;
+    $scope.child = [];
+
     fedoraServiceJSON.fetch(url).then(function(data) {
+
         if (data['@graph'] != null) {
             var annos = data['@graph'].splice(1, data['@graph'].length - 1);
-            angular.forEach(annos, function(value) {
-                $scope.innernodes = [];
-                //console.log(value['http://purl.org/dc/elements/1.1/title']);
-                var child_url = value['@id'];
-                //fedoraServiceXML.fetch(child_url + '/fcr:export');
-                var t = function(url) {
-                return $http({
-                    method: 'get',
-                    url: url,
-                });
-                var x2js = new X2JS();
-                //$scope.child = x2js.xml_str2json(test.data);
-                //console.log($scope.child);
-                console.log(t);
 
-                //console.log(mydata);
+            angular.forEach(annos, function(value) {
+                var temp = [];
+                $http.get(value['@id'] + '/fcr:export').success(function(data) {
+                    var x2js = new X2JS();
+                    var d = x2js.xml_str2json(data);
+                    //temp = [];
+                    temp.pop();
+                    temp.push(d);
+                    //console.log(JSON.stringify(d));
+
+                })
+
+                console.log(temp);
                 var tuple = {'title': value['dc:title'],
                     'uuid': value['fcrepo:#uuid'],
-                    'id': value['@id'],
+                    'url': value['@id'],
                     'text': value['dc:description'],
                     'date': value['fcrepo:#created'],
                     'name': value['fcrepo:#createdBy'],
                     'profileUrl': 'http://dummyimage.com/40x40&text=' + value['fcrepo:#createdBy'],
-                    'child': $scope.child
-
-
+                    'annotations': temp
 
                 }
+
                 $scope.comments.push(tuple);
+
+
+
+                //$scope.tmp = [];
             });
         }
+
 
         //console.log($scope.comments);
         sort_text = 'date';

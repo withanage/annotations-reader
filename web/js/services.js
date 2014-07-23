@@ -25,19 +25,28 @@ readerAppServices.factory('generateUUID', function() {
 
 
 
-readerAppServices.factory('fedoraServiceXML', function($http) {
-    var fetch = function(url) {
-        return $http({
-            method: 'get',
-            url: url,
-        });
-        
-        
-    };
-   
-    return {
-        fetch: fetch
-    };
+readerAppServices.factory('fedoraServiceXML', function($http, $q) {
+    var deferred = $q.defer();
+    var x = {fetch: function(url) {
+            $http.get(url).success(function(data) {
+                var x2js = new X2JS();
+                var d = x2js.xml_str2json(data);
+                return d;
+                //console.log(d);
+                //deferred.resolve(d);
+            })
+
+            return deferred.promise;
+            //console.log(deferred.promise);
+            
+        }
+    }
+    console.log(x);
+    return x;
+
+
+
+
 })
 
 
