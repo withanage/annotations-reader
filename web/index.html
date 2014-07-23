@@ -27,6 +27,14 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="css/custom.css">
 
 
+        <style type="text/css">
+            div.media
+            {
+                position:relative;left:40px;top:1px;
+                border:1px solid #fff;
+            }
+
+        </style>
 
     </head>
     <body>
@@ -59,7 +67,7 @@ and open the template in the editor.
 
 
             <accordion close-others="oneAtATime">
-                <accordion-group  ng-repeat=" comment in comments | filter:search:strict | orderBy: - post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
+                <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy: -post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
                     <accordion-heading> 
 
                         <div class="row">
@@ -72,19 +80,25 @@ and open the template in the editor.
 
 
                     </accordion-heading>
-                  
+
                     <script type="text/ng-template" id="categoryTree">
-                        {{anno.property[5].value.__text}}{{anno[5].value.__text}}
-                        ______________
-                         {{anno[11].value.__text}} {{anno.property[11].value.__text}}
-                        <ul ng-if="anno.node">
-                        <li ng-repeat="anno in anno.node" ng-include="'categoryTree'">           
-                        </li>
-                        </ul>
+                        
+                        <div class="media">
+                        
+                        <a class='pull-left' href='#' ><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a>
+                        <div class='media-body' >
+                            <h4 class='media-heading'>
+                            </h4>
+                        {{anno}}
+                         </div>   
+                        <div class="media" ng-repeat="anno in anno.node" ng-include="'categoryTree'">           
+                        
+                        </div>
+                        </div>
                     </script>   
-                    <ul>
-                        <li ng-repeat="anno in comment.annotations" ng-include="'categoryTree'"></li>
-                    </ul>    
+
+                    <div class="panel-body" ng-repeat="anno in comment.annotations" ng-include="'categoryTree'"></div>
+
 
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
