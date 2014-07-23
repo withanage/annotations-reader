@@ -7,7 +7,7 @@ angular.module('APP', [])
                 scope: {
                     collection: '='
                 },
-                template: "<div class='panel-body'><member ng-repeat='member in collection'  member='member' ></member></div>"
+                template: "<div class='panel-body'><member ng-repeat='member in collection'  member='member'></member></div>"
             };
         })
 
@@ -19,7 +19,7 @@ angular.module('APP', [])
                     member: '='
                 },
                 template: "\
-                    <div class='media'>\n\
+                    <div id='{{!(member.length==12&&member.property.length==12)}}' class='media'>\n\
                         <a class='pull-left' href='#' ng-if='(member.length==12) || (member.property.length==12)'><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a>\n\
                         <div class='media-body' ng-if='(member.length==12) || (member.property.length==12)' > \n\
                         <h4 class='media-heading'>{{member[5].value.__text}}{{member.property[5].value.__text}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \n\
@@ -31,10 +31,10 @@ angular.module('APP', [])
                         </div>\n\
                     </div>",
                 link: function(scope, element, attrs) {
-                    //if (angular.isArray(scope.member.node)) {
+                    if (angular.isArray(scope.member.node)) {
                         element.append("<collection collection='member.node'></collection>");
                         $compile(element.contents())(scope);
-                    //}
+                    }
                 }
             };
         })
