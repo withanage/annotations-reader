@@ -6,7 +6,7 @@
 
 
 var readerAppControllers = angular.module('readerAppControllers', []);
-readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $modal, $log, $http, $window, $route, $location, generateUUID) {
+readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, fedoraServiceXML, $modal, $log, $http, $window, $route, $location, generateUUID) {
     $scope.oneAtATime = true;
     $scope.status = {
         isFirstOpen: true,
@@ -20,37 +20,42 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
 
     //console.log("url", url);
     //console.log("location", $location);
-    
-   
-    
-    
-    
+
+
+
+
+    $scope.tasks = [];
     $scope.comments = [];
-    fedoraService.fetch(url).then(function(data) {
+    $scope.child;
+    fedoraServiceJSON.fetch(url).then(function(data) {
         if (data['@graph'] != null) {
             var annos = data['@graph'].splice(1, data['@graph'].length - 1);
             angular.forEach(annos, function(value) {
+                $scope.innernodes = [];
                 //console.log(value['http://purl.org/dc/elements/1.1/title']);
-                //console.log(value);
-                var children = (value['ldp:#contains'] ? value['ldp:#contains'] : []);
-                console.log(value['dc:title']);
-                var mychildren = [];
-                angular.forEach(children, function(child) {
-                    mychildren.push(child);
-                })
+                var child_url = value['@id'];
+                var test =fedoraServiceXML.fetch(child_url + '/fcr:export');
+                var x2js = new X2JS();
+                $scope.child = x2js.xml_str2json(test.data);
+                
+
+                //console.log(mydata);
                 var tuple = {'title': value['dc:title'],
-                    'id':value['fcrepo:#uuid'],
+                    'uuid': value['fcrepo:#uuid'],
+                    'id': value['@id'],
                     'text': value['dc:description'],
                     'date': value['fcrepo:#created'],
                     'name': value['fcrepo:#createdBy'],
                     'profileUrl': 'http://dummyimage.com/40x40&text=' + value['fcrepo:#createdBy'],
-                    'child_count': children.length,
-                    'children': mychildren
+                    'child': $scope.child 
+
+
 
                 }
                 $scope.comments.push(tuple);
             });
         }
+
         //console.log($scope.comments);
         sort_text = 'date';
         $scope.comments.sort(function(a, b) {
@@ -62,24 +67,19 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
         })
         $scope.comments = $scope.comments.sort();
         //console.log($scope.comments);
-        
+
         $scope.add = function(data) {
-        var post = data.nodes.length + 1;
-        var newName = data.name + '-' + post;
-        data.nodes.push({name: newName,nodes: []});
-    };
-    $scope.tree = [{name: "Node", nodes: []}];
-
-
-
+            var post = data.nodes.length + 1;
+            var newName = data.name + '-' + post;
+            data.nodes.push({name: newName, nodes: []});
+        };
+        $scope.tree = [{name: "Node", nodes: []}];
     });
-    
-    
     //form
     $scope.submit = function(id) {
 
         if (id == null) {
-            $scope.childurl = url + generateUUID;//''+ Math.floor(Math.random() * 10000000000000000);
+            $scope.childurl = url + generateUUID; //''+ Math.floor(Math.random() * 10000000000000000);
             $scope.title = this.title;
             $scope.text = this.text;
         }
@@ -123,27 +123,20 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
         }).error(function(err) {
             "ERR", console.log(err)
         });
-
-
-
-        fedoraService.fetch(url).then(function(data) {
+        fedoraServiceJSON.fetch(url).then(function(data) {
         });
-
-        //$route.reload();
-        //$window.location.reload();
+        $route.reload();
+        $window.location.reload();
         //$scope.$apply( $location.path(url) );
 
 
     };
-
-
-
     $scope.tags = [];
     $scope.getdata = function(url, values) {
 
         angular.forEach(values, function(value, key) {
             //console.log(value['@id']);
-            fetchfedora.fetch(value['@id']).then(function(data) {
+            fetchfedoraJSON.fetch(value['@id']).then(function(data) {
                 var tag = data['@graph']['0']['oa:#hasBody'];
                 if (angular.isUndefined(tag)) {
                     console.log(tag);
@@ -155,11 +148,8 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
             });
         });
     };
-
-
     //modal
     $scope.items = ['item1', 'item2', 'item3'];
-
     $scope.open = function(size) {
 
         var modalInstance = $modal.open({
@@ -172,15 +162,12 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
                 }
             }
         });
-
         modalInstance.result.then(function(selectedItem) {
             $scope.selected = selectedItem;
         }, function() {
             $log.info('Modal dismissed at: ' + new Date());
         });
     };
-
-
 // $modalInstance represents a modal window (instance) dependency.
 
 
@@ -190,28 +177,21 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraService, $mod
         $scope.selected = {
             item: $scope.items[0]
         };
-
         $scope.ok = function() {
             $modalInstance.close($scope.selected.item);
         };
-
         $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
     };
-
     //end modal
 
 
 });
-
-
-
 readerAppControllers.controller('WordCtrl', function($scope, debounce) {
 
     $scope.words = [];
     $scope.sentence = '';
-
     $scope.parseSentence = function() {
         var words = $scope.sentence.split(/\s+/g);
         var wordObjects = [];
@@ -224,7 +204,6 @@ readerAppControllers.controller('WordCtrl', function($scope, debounce) {
             $scope.words = wordObjects;
         }
     };
-
     $scope.parseSentenceDebounced = debounce($scope.parseSentence, 700, false);
     $scope.buildSentance = function(w) {
         var words = [];
@@ -237,11 +216,9 @@ readerAppControllers.controller('WordCtrl', function($scope, debounce) {
 
         $scope.sentence = words.join(' ');
         $scope.parseSentenceDebounced();
-
     }
 
     $scope.parseSentence();
-
 });
 
 

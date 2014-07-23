@@ -17,6 +17,8 @@ and open the template in the editor.
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-touch.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>
         <script src= http://cdnjs.cloudflare.com/ajax/libs/jsonld/0.2.13/jsonld.js></script>
+        <script src="https://x2js.googlecode.com/hg/xml2json.js" type="text/javascript"></script>
+
         <script src="js/controllers.js"></script>
         <script src="js/services.js"></script>
         <script src="js/commenter.js"></script>
@@ -36,7 +38,9 @@ and open the template in the editor.
         </nav>
 
         <div ng-controller="MainCtrl">
-
+            <ul>
+                <li ng-repeat="task in tasks">{{task}}</li>
+            </ul>
 
             <input type="search" ng-model="search.$" placeholder="Suche in Annotationen" class="form-control"/>
             <!--enter annotation -->
@@ -54,7 +58,6 @@ and open the template in the editor.
 
 
 
-
             <accordion close-others="oneAtATime">
                 <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy:-post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
                     <accordion-heading> 
@@ -69,8 +72,7 @@ and open the template in the editor.
 
 
                     </accordion-heading>
-
-                    {{comment.text}}
+                    {{comment}}
 
                     <button class="btn btn-default"  ng-repeat="tag in tags"  >{{tag}}</button>
                     <br>

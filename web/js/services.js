@@ -20,15 +20,28 @@ readerAppServices.factory('generateUUID', function() {
         d = Math.floor(d / 16);
         return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
     });
-    return "1"+uuid;
+    return "1" + uuid;
 });
 
 
 
+readerAppServices.factory('fedoraServiceXML', function($http) {
+    var fetch = function(url) {
+        return $http({
+            method: 'get',
+            url: url,
+        });
+        
+        
+    };
+   
+    return {
+        fetch: fetch
+    };
+})
 
 
-
-readerAppServices.factory('fedoraService', function($q, $http) {
+readerAppServices.factory('fedoraServiceJSON', function($q, $http) {
 
 
     var context = {
@@ -40,7 +53,6 @@ readerAppServices.factory('fedoraService', function($q, $http) {
         "oa": "http://www.w3.org/ns/oa",
         "mixin": "http://www.jcp.org/jcr/mix/1.0",
         "oax": 'http://www.w3.org/ns/openannotation/extensions/',
-        
     };
     var jsonld_download = {
         fetch: function(url) {
@@ -49,7 +61,7 @@ readerAppServices.factory('fedoraService', function($q, $http) {
             $http.get(url, config).success(function(data) {
                 //deferred.resolve(data);
                 jsonld.compact(data, context, function(err, compacted) {
-                   
+
                     deferred.resolve(compacted);
                 });
             }).error(function(headers, status) {
@@ -69,7 +81,7 @@ readerAppServices.factory('fedoraService', function($q, $http) {
 
 
             });
-             //console.info(deferred.promise);
+            //console.info(deferred.promise);
             return deferred.promise;
         }
     };
