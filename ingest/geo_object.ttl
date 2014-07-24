@@ -1,0 +1,36 @@
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>
+PREFIX digi: <http://digi.ub.uni-heidelberg.de/>
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX xs: <http://www.w3.org/2001/XMLSchema#>
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+PREFIX cnt: <http://www.w3.org/2011/content#>
+PREFIX gnd: <http://d-nb.info/gnd/>
+PREFIX oax: <http://www.w3.org/ns/openannotation/extensions/> 
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
+prefix local: <http://pers31.ub.uni-heidelberg.de:8080/fedora/>
+
+<> dc:format "text/html" .
+<>  dc:title "Automatisches Geno_annotation Beispiel" .
+
+<> a oa:Annotation;
+   
+   oa:hasBody _:digi_275163a6-d14b-11e1-b9b2-00163e110825 ;
+   oa:hasBody _:digi_xyz .
+
+
+ _:digi_xyz   a cnt:ContentAsText;
+    cnt:chars """
+                <?xml version="1.0" standalone="no"?>
+                     <polygon xmlns="http://www.w3.org/2000/svg"
+                          points="5315,5639 5444,5529 5505,5593 5346,5691 5315,5639" />
+
+                """ .
+
+
+
+_:digi_275163a6-d14b-11e1-b9b2-00163e110825 a cnt:ContentAsText;
+   dcterms:format "application/svg";
+   cnt:chars "xyz?marlier=POLYGON((5315 5639,5444 5529,5505 5593,5346 5691,5315 5639))" .
