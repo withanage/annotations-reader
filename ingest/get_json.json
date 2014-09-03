@@ -1,60 +1,106 @@
-[{
-        "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1",
-        "@type": ["http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable"],
-        "http://fedora.info/definitions/v4/repository#created": [{
-                "@value": "2014-06-12T14:40:53.69Z"
-            }],
-        "http://fedora.info/definitions/v4/repository#createdBy": [{
-                "@value": "bypassAdmin"
-            }],
-        "http://fedora.info/definitions/v4/repository#hasParent": [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"
-            }],
-        "http://fedora.info/definitions/v4/repository#lastModified": [{
-                "@value": "2014-06-12T14:40:54.328Z"
-            }],
-        "http://fedora.info/definitions/v4/repository#lastModifiedBy": [{
-                "@value": "bypassAdmin"
-            }],
-        "http://fedora.info/definitions/v4/repository#mixinTypes": [{
-                "@value": "oa:Annotation"
-            }, {
-                "@value": "fedora:resource"
-            }, {
-                "@value": "fedora:object"
-            }],
-        "http://fedora.info/definitions/v4/repository#primaryType": [{
-                "@value": "nt:folder"
-            }],
-        "http://fedora.info/definitions/v4/repository#uuid": [{
-                "@value": "a7e7b429-524e-4101-acd1-d2fc08571423"
-            }],
-        "http://fedora.info/definitions/v4/rest-api#exportsAs": [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1/fcr:export?format=jcr/xml"
-            }],
-        "http://fedora.info/definitions/v4/rest-api#hasAccessRoles": [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1/fcr:accessroles"
-            }],
-        "http://fedora.info/definitions/v4/rest-api#writable": [{
-                "@type": "http://www.w3.org/2001/XMLSchema#boolean",
-                "@value": "true"
-            }],
-        "http://purl.org/dc/elements/1.1/format": [{
-                "@value": "text/html"
-            }],
-        "http://purl.org/dc/elements/1.1/title": [{
-                "@value": "Title"
-            }],
-        "http://www.w3.org/ns/ldp#hasMemberRelation": [{
-                "@id": "http://fedora.info/definitions/v4/repository#hasChild"
-            }],
-        "http://www.w3.org/ns/ldp#membershipResource": [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1"
-            }],
-        "http://www.w3.org/ns/oa#hasBody": [{
-                "@id": "http://pers31.ub.uni-heidelberg.de:8080/rest/.well-known/genid/9df49f56-9876-4791-8fd3-264692123db3"
-            }],
-        "http://www.w3.org/ns/oa#hasTarget": [{
-                "@id": "digi:diglit/lehmann1756/0001"
-            }]
-    }]
+[ {
+  "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001",
+  "@type" : [ "http://www.w3.org/ns/ldp#Container", "http://www.w3.org/ns/ldp#DirectContainer", "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created" ],
+  "http://fedora.info/definitions/v4/repository#created" : [ {
+    "@value" : "2014-09-03T13:02:15.87Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#createdBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasChild" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasParent" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756"
+  } ],
+  "http://fedora.info/definitions/v4/repository#primaryType" : [ {
+    "@value" : "nt:folder"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#exportsAs" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/fcr:export?format=jcr/xml"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#writable" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#boolean",
+    "@value" : "true"
+  } ],
+  "http://www.w3.org/ns/ldp#contains" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1"
+  } ],
+  "http://www.w3.org/ns/ldp#hasMemberRelation" : [ {
+    "@id" : "http://fedora.info/definitions/v4/repository#hasChild"
+  } ],
+  "http://www.w3.org/ns/ldp#membershipResource" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"
+  } ]
+}, {
+  "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/1",
+  "@type" : [ "http://www.jcp.org/jcr/nt/1.0folder", "http://www.jcp.org/jcr/nt/1.0hierarchyNode", "http://www.jcp.org/jcr/nt/1.0base", "http://www.jcp.org/jcr/mix/1.0created", "http://fedora.info/definitions/v4/rest-api#resource", "http://fedora.info/definitions/v4/rest-api#object", "http://www.w3.org/ns/oa#Annotation", "http://fedora.info/definitions/v4/rest-api#relations", "http://www.jcp.org/jcr/mix/1.0lastModified", "http://www.jcp.org/jcr/mix/1.0lockable", "http://www.jcp.org/jcr/mix/1.0referenceable", "http://purl.org/dc/elements/1.1/describable" ],
+  "http://fedora.info/definitions/v4/repository#created" : [ {
+    "@value" : "2014-09-03T13:02:15.87Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#createdBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#hasParent" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModified" : [ {
+    "@value" : "2014-09-03T13:02:15.87Z"
+  } ],
+  "http://fedora.info/definitions/v4/repository#lastModifiedBy" : [ {
+    "@value" : "bypassAdmin"
+  } ],
+  "http://fedora.info/definitions/v4/repository#mixinTypes" : [ {
+    "@value" : "fedora:resource"
+  }, {
+    "@value" : "fedora:object"
+  }, {
+    "@value" : "oa:Annotation"
+  } ],
+  "http://fedora.info/definitions/v4/repository#primaryType" : [ {
+    "@value" : "nt:folder"
+  } ],
+  "http://fedora.info/definitions/v4/repository#uuid" : [ {
+    "@value" : "aa09b8d3-f3a5-4b50-942e-3e45c01de5be"
+  } ],
+  "http://fedora.info/definitions/v4/rest-api#writable" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#boolean",
+    "@value" : "true"
+  } ],
+  "http://purl.org/dc/elements/1.1/description" : [ {
+    "@value" : "Automatisches Geo_annotation Beispiel text"
+  } ],
+  "http://purl.org/dc/elements/1.1/format" : [ {
+    "@value" : "text/html"
+  } ],
+  "http://purl.org/dc/elements/1.1/title" : [ {
+    "@value" : "Automatisches Geo_annotation Beispiel"
+  } ],
+  "http://www.w3.org/2011/content#chars" : [ {
+    "@value" : "\n                <?xml version=\"1.0\" standalone=\"no\"?>\n                     <polygon xmlns=\"http://www.w3.org/2000/svg\"\n                          points=\"5666666,66666666\" />\n\n                "
+  } ],
+  "http://www.w3.org/ns/oa#hasBody" : [ {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/.well-known/genid/366d2fd4-9fe1-448e-a415-6c4a30a517e6"
+  }, {
+    "@id" : "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/.well-known/genid/25f75003-af96-4a34-b966-4997e27358c3"
+  } ],
+  "http://www.w3.org/ns/openannotation/extensions/hasSemanticTag" : [ {
+    "@id" : "http://dbpedia.org/resource/Strait_of_Gibraltar"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Atlantic_Ocean"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Ancient_history"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Pillars_of_Hercules"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Gibraltar"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Classical_antiquity"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Ancient_Egypt"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Mediterranean_Basin"
+  }, {
+    "@id" : "http://dbpedia.org/resource/Mediterranean_Sea"
+  } ]
+} ]

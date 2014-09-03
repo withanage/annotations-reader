@@ -1,6 +1,6 @@
 #!/bin/bash
 for i in {1..1}
 do
-curl  "http://serv21.ub.uni-heidelberg.de:8080/annotations/rest/test/"  -H "Accept: application/json+rdf"
+curl  "http://pers31.ub.uni-heidelberg.de:8080/fedora/rest/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/"  -H "Accept: application/json+rdf"
    
 done

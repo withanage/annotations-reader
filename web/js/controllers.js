@@ -8,9 +8,12 @@
 var readerAppControllers = angular.module('readerAppControllers', []);
 readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, fedoraServiceXML, $modal, $log, $http, $window, $route, $location, generateUUID, $q) {
     $scope.oneAtATime = true;
+ 
+ 
     $scope.status = {
         isFirstOpen: true,
         isFirstDisabled: false
+        
     };
     var prefix = 'fedora/rest';
     var collection = $location.$$path;
@@ -18,7 +21,7 @@ readerAppControllers.controller('MainCtrl', function($scope, fedoraServiceJSON, 
     //http://pers31.ub.uni-heidelberg.de:8080/annotations-reader/index.html#/de/uni-heidelberg/ub/digi/diglit/lehmann1756/0001/
     var url = $location.$$protocol + "://" + $location.$$host + ':' + server_port + '/' + prefix + '' + collection;
     //var new_id = Math.floor(Math.random() * 1000000000000000000000);
-
+    
     //console.log("url", url);
     //console.log("location", $location);
 

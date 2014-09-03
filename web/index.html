@@ -5,7 +5,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!doctype html>
-<html ng-app="readerApp">
+<html >
     <head>
         <title>Annotations Applications</title>
         <meta charset="UTF-8">
@@ -25,7 +25,7 @@ and open the template in the editor.
         <script src="js/filters.js"></script>
         <script src="js/app.js"></script>
         <script src="js/moment.min.js"></script>
-        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="css/custom.css">
 
 
@@ -40,7 +40,7 @@ and open the template in the editor.
         </style>
 
     </head>
-    <body>
+    <body ng-app="readerApp">
 
 
 
@@ -68,13 +68,14 @@ and open the template in the editor.
             </div>
 
 
-
+ <button class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
             <accordion close-others="oneAtATime">
-                <accordion-group  ng-repeat=" comment in comments| filter:search:strict | orderBy: -post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}">
+                <accordion-group ng-repeat="comment in comments| filter:search:strict | orderBy: -post"  is-open="status.open" >
+                    <!--accordion-group  is-open="status.open" ng-repeat=" comment in comments| filter:search:strict | orderBy: -post" ng-click='getdata(comment.id, post["oa:#hasBody"])'   id="{{comment.id}}"-->
                     <accordion-heading> 
 
                         <div class="row">
-                            <div class="col-md-9">[{{$index + 1}}]<img ng-src="{{comment.profileUrl}}"> {{comment.title}} </div>
+                            <div class="col-md-9" id="{{comment.url}}">[{{$index + 1}}]<img ng-src="{{comment.profileUrl}}"> {{comment.text}} </div>
 
                             <div class="col-md-3"><p class="text-right"><small>{{comment.date.split('T')[0]}}  {{comment.date.split('T')[1].split('.')[0]}}</small></p></div>
                             <div class="col-md-0"><span class="badge pull-right"> {{child[0]["ldp:#contains"].length}}</span></div>
@@ -90,13 +91,17 @@ and open the template in the editor.
                         
                         <a class='pull-left' href='#' ><img class='media-object' src='http://placehold.it/40x40' alt='...'>  </a>
                         <div class='media-body' >
-                            <h4 class='media-heading'>{{anno[5].value.__text}}{{anno.property[5].value.__text}}
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <small>{{anno.property[3].value.__text}}</small>  
-                            <small>{{anno.property[9].value.__text | fromNow}}</small>
+                            <h4 class='media-heading'>
+                            <small>{{anno.property[6].value.__text}}
+                            </small>  
+                            
                             </h4>
-                     {{anno[11].value.__text}}{{anno.property[11].value.__text}}
-                         </div>   
+                    &nbsp;
+                     <!--
+             {{anno[11].value.__text}}{{anno.property[6].value.__text}}
+              -->
+                         </div> 
+                 
                         <div class="media" ng-repeat="anno in anno.node" ng-include="'categoryTree'">           
                         
                         </div>

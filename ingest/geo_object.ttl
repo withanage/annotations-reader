@@ -13,7 +13,24 @@ PREFIX tags: <http://pers31.ub.uni-heidelberg.de/rest/tags/>
 prefix local: <http://pers31.ub.uni-heidelberg.de:8080/fedora/>
 
 <> dc:format "text/html" .
-<>  dc:title "Automatisches Geno_annotation Beispiel" .
+<>  dc:title "Automatisches Geo_annotation Beispiel" .
+<>  dc:description "Automatisches Geo_annotation Beispiel text" .
+<>  cnt:chars """
+                <?xml version="1.0" standalone="no"?>
+                     <polygon xmlns="http://www.w3.org/2000/svg"
+                          points="5666666,66666666" />
+
+                """ .
+
+<> oax:hasSemanticTag <http://dbpedia.org/resource/Mediterranean_Sea>,
+                 <http://dbpedia.org/resource/Strait_of_Gibraltar>,
+                 <http://dbpedia.org/resource/Pillars_of_Hercules>,
+                 <http://dbpedia.org/resource/Gibraltar>,
+                 <http://dbpedia.org/resource/Atlantic_Ocean>,
+                 <http://dbpedia.org/resource/Classical_antiquity>,
+                 <http://dbpedia.org/resource/Ancient_history>,
+                 <http://dbpedia.org/resource/Ancient_Egypt>,
+                 <http://dbpedia.org/resource/Mediterranean_Basin> .
 
 <> a oa:Annotation;
    
@@ -25,7 +42,7 @@ prefix local: <http://pers31.ub.uni-heidelberg.de:8080/fedora/>
     cnt:chars """
                 <?xml version="1.0" standalone="no"?>
                      <polygon xmlns="http://www.w3.org/2000/svg"
-                          points="5315,5639 5444,5529 5505,5593 5346,5691 5315,5639" />
+                          points="5666666,66666666" />
 
                 """ .
 
